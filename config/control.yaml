@@ -1,0 +1,23 @@
+MarsRover:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50 
+ 
+  # Position Controllers ---------------------------------------
+  jointRF_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: c_RightMainRocket_BogieRF
+    pid: {p: 10.0, i: 0.01, d: 10.0}
+  jointLF_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: c_LeftMainRocket_BogieLF
+    pid: {p: 10.0, i: 0.01, d: 10.0}
+  jointRR_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: c_RightViceRocket_BogieRR
+    pid: {p: 10.0, i: 0.01, d: 10.0}
+  jointLR_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: c_LeftViceRocket_BogieLR
+    pid: {p: 10.0, i: 0.01, d: 10.0}

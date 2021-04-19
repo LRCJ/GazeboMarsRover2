@@ -1,0 +1,4 @@
+Mars Rover Simulation In Gazebo
+===
+　　在[原项目](https://github.com/LRCJ/GazeboMarsRover)的基础上，火星车添加了转向机构。因此，原项目中的实现差速转向的插件程序"libgazebo_ros_skid_steer_drive.so"修改为"libMarsRoverDriver.so"，在功能上实现了阿克曼转向。同时完善了原项目的一些问题，如模型路径问题。其余功能，如键盘手柄控制，激光雷达等保持不变。<br>
+　　地形方面，使用了基于HiRISE项目[火星地形数据](https://www.uahirise.org/dtm/)的地形模型，使用Blender将火星地形高程数据转变成3D模型STL文件，将HiRISE项目的DTM文件转变为3D模型需要依靠一个Blender的插件[Blender-Hirise-DTM-Importer](https://github.com/phaseIV/Blender-Hirise-DTM-Importer)。本项目中使用了一个HiRISE项目的地形数据模型，由于超过了100M无法上传到Github，放在Google Drive上——[DTEEC_050438_1890_051071_1890_Nili Patera Monitoring_10.dae](https://drive.google.com/file/d/1uM6Z7Rvo_YWs4zVQA1tHq0KJ9TM_AgfF/view?usp=sharing)，以及百度云上——[DTEEC_050438_1890_051071_1890_Nili Patera Monitoring_10.dae](https://pan.baidu.com/s/1o5GucZIGg1ozqy3INnMKpA)(提取码：m438)，该地形文件需要放在meshes/terrain/路径下。

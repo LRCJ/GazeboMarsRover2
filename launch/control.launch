@@ -1,0 +1,14 @@
+<launch>
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find mars_rover_2)/config/control.yaml" command="load"/>
+ 
+  <!-- load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="MarsRover" args="jointRF_position_controller jointLF_position_controller jointRR_position_controller jointLR_position_controller"/>
+ 
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/rrbot/joint_states" />
+  </node> -->
+</launch>

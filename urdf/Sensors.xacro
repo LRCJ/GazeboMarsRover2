@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="PandarQT_LiDAR">
+  <xacro:property name="PI" value="3.1415926535897931" />
+  <xacro:macro name="PandarQT" params="link:=base_link topic:=PandarQT_Data hz:=10 lasers:=64 samples:=2187 min_range:=0.8 max_range:=30.0 min_angle_h:=-180 max_angle_h:=180 min_angle_v:=-52.1 max_angle_v:=52.1 resolution:=0.02 noise:=0.00 visual:=true gpu:=false">
+
+    <!-- Gazebo requires the velodyne_gazebo_plugins package -->
+    <gazebo reference="${link}">
+      <xacro:if value="${gpu}">
+        <sensor type="gpu_ray" name="${link}_Sensor">
+          <pose>0 0 0 0 0 0</pose>
+          <visualize>${visual}</visualize>
+          <update_rate>${hz}</update_rate>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>${samples}</samples>
+                <resolution>1</resolution>
+                <xacro:if value="${max_angle_h-min_angle_h-360.0}">
+                    <min_angle>${min_angle_h/180.0*PI}</min_angle>
+                    <max_angle>${max_angle_h/180.0*PI}</max_angle>
+                </xacro:if>
+                <xacro:unless value="${max_angle_h-min_angle_h-360.0}">
+                    <min_angle>${min_angle_h/180.0*PI}</min_angle>
+                    <max_angle>${(min_angle_h+(max_angle_h-min_angle_h)*(samples-1)/samples)/180.0*PI}</max_angle>
+                </xacro:unless>
+              </horizontal>
+              <vertical>
+                <samples>${lasers}</samples>
+                <resolution>1</resolution>
+                <min_angle>${min_angle_v/180.0*PI}</min_angle>
+                <max_angle>${max_angle_v/180.0*PI}</max_angle>
+              </vertical>
+            </scan>
+            <range>
+              <min>${min_range}</min>
+              <max>${max_range}</max>
+              <resolution>${resolution}</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.0</stddev>
+            </noise>
+          </ray>
+          <!--该角度以绕Z轴由X轴转至Y轴为正方向，X轴正方向为起始，Gazebo仿真里面Lidar的角度以X轴负方向为起始 -->
+          <plugin name="LidarPubData" filename="$(find mars_rover_2)/plugins/LidarPubData/build/libLidarPubData_plugins.so">
+            <topicName>${topic}</topicName>
+            <frameName>${link}</frameName>
+            <min_range>${min_range}</min_range>
+            <max_range>${max_range}</max_range>
+            <gaussianNoise>${noise}</gaussianNoise>
+            <min_intensity>0</min_intensity>
+            <ignoreAzimuthAngleUp>240</ignoreAzimuthAngleUp>
+            <ignoreAzimuthAngleLow>120</ignoreAzimuthAngleLow>
+            <ignoreScanIDUp>44</ignoreScanIDUp>
+            <ignoreScanIDLow>6</ignoreScanIDLow>
+          </plugin>
+        </sensor>
+      </xacro:if>
+      <xacro:unless value="${gpu}">
+        <sensor type="ray" name="${link}_Sensor">
+          <pose>0 0 0 0 0 0</pose>
+          <visualize>${visual}</visualize>
+          <update_rate>${hz}</update_rate>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>${samples}</samples>
+                <resolution>1</resolution>
+                <xacro:if value="${max_angle_h-min_angle_h-360.0}">
+                    <min_angle>${min_angle_h/180.0*PI}</min_angle>
+                    <max_angle>${max_angle_h/180.0*PI}</max_angle>
+                </xacro:if>
+                <xacro:unless value="${max_angle_h-min_angle_h-360.0}">
+                    <min_angle>${min_angle_h/180.0*PI}</min_angle>
+                    <max_angle>${(min_angle_h+(max_angle_h-min_angle_h)*(samples-1)/samples)/180.0*PI}</max_angle>
+                </xacro:unless>
+              </horizontal>
+              <vertical>
+                <samples>${lasers}</samples>
+                <resolution>1</resolution>
+                <min_angle>${min_angle_v/180.0*PI}</min_angle>
+                <max_angle>${max_angle_v/180.0*PI}</max_angle>
+              </vertical>
+            </scan>
+            <range>
+              <min>${min_range}</min>
+              <max>${max_range}</max>
+              <resolution>${resolution}</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </ray>
+          <plugin name="LidarPubData" filename="$(find mars_rover_2)/plugins/LidarPubData/build/libLidarPubData_plugins.so">
+            <topicName>${topic}</topicName>
+            <frameName>${link}</frameName>
+            <min_range>${min_range}</min_range>
+            <max_range>${max_range}</max_range>
+            <gaussianNoise>${noise}</gaussianNoise>
+            <min_intensity>0</min_intensity>
+            <ignoreAzimuthAngleUp>0.7</ignoreAzimuthAngleUp>
+            <ignoreAzimuthAngleLow>-0.7</ignoreAzimuthAngleLow>
+            <ignoreScanIDUp>27</ignoreScanIDUp>
+            <ignoreScanIDLow>-1</ignoreScanIDLow>
+          </plugin>
+        </sensor>
+      </xacro:unless>
+    </gazebo>
+  </xacro:macro>
+  <xacro:macro name="IMU" params="link:=base_link enable_gravity:=true imu_name:=imu_1 hz:=100 enable_visual:=true topic_name:=imu_raw frameName:=imu_link gaussianNoise:=0.1 x:=0 y:=0 z:=0 roll:=0 pitch:=0 yaw:=0">
+    <gazebo reference="${link}">
+      <gravity>${enable_gravity}</gravity>
+      <sensor name="${imu_name}" type="imu">
+        <always_on>true</always_on>
+        <update_rate>${hz}</update_rate>
+        <visualize>${enable_visual}</visualize>
+        <topic>${topic_name}</topic>
+        <plugin name="imu_plugin" filename="$(find mars_rover_2)/plugins/ImuPubData/build/libImuPubData_plugins.so">
+          <topicName>${topic_name}</topicName>
+          <bodyName>${link}</bodyName>
+          <updateRateHZ>${hz}</updateRateHZ>
+          <gaussianNoise>${gaussianNoise}</gaussianNoise>
+          <xyzOffset>${x} ${y} ${z}</xyzOffset>
+          <rpyOffset>${roll} ${pitch} ${yaw}</rpyOffset>
+          <frameName>${link}</frameName>
+        </plugin>
+        <pose>0 0 0 0 0 0</pose>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+</robot>

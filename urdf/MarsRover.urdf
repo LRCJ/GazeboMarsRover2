@@ -1,0 +1,1107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="mars_rover_2">
+  <link
+    name="Body">
+    <inertial>
+      <origin
+        xyz="-0.00020734 5.5511E-16 -0.3822"
+        rpy="0 0 0" />
+      <mass
+        value="32.918" />
+      <inertia
+        ixx="4.4731"
+        ixy="2.198E-15"
+        ixz="-0.00091963"
+        iyy="7.3964"
+        iyz="-5.1204E-16"
+        izz="9.2915" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/Body.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/Body.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="LiDARBodyCon">
+    <inertial>
+      <origin
+        xyz="-0.011096 -1.1102E-16 -0.0090905"
+        rpy="0 0 0" />
+      <mass
+        value="0.2293" />
+      <inertia
+        ixx="0.00036659"
+        ixy="2.3915E-19"
+        ixz="-4.7613E-05"
+        iyy="0.00023526"
+        iyz="-2.2376E-21"
+        izz="0.00053318" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/LiDARBodyCon.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/LiDARBodyCon.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="f_Body_LiDARBodyCon"
+    type="fixed">
+    <origin
+      xyz="0.64401 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Body" />
+    <child
+      link="LiDARBodyCon" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="LiDARSupport">
+    <inertial>
+      <origin
+        xyz="0.0018554 -1.1102E-16 -0.004"
+        rpy="0 0 0" />
+      <mass
+        value="0.23629" />
+      <inertia
+        ixx="0.00032757"
+        ixy="-9.7461E-20"
+        ixz="0"
+        iyy="0.00014519"
+        iyz="-2.0364E-20"
+        izz="0.00047027" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/LiDARSupport.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/LiDARSupport.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_LiDARBodyCon_LiDARSupport"
+    type="continuous">
+    <origin
+      xyz="0.0025424 0 0.025757"
+      rpy="0 0.44897 0" />
+    <parent
+      link="LiDARBodyCon" />
+    <child
+      link="LiDARSupport" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="LiDAR">
+    <inertial>
+      <origin
+        xyz="-0.00012666 -9.4179E-09 -0.012924"
+        rpy="0 0 0" />
+      <mass
+        value="0.47584" />
+      <inertia
+        ixx="0.00040759"
+        ixy="-1.4014E-10"
+        ixz="-1.3527E-06"
+        iyy="0.00040186"
+        iyz="-1.5782E-10"
+        izz="0.0003397" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/LiDAR.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/LiDAR.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="f_LiDARSupport_LiDAR"
+    type="fixed">
+    <origin
+      xyz="0.0043256 0 0.0504"
+      rpy="0 0 0" />
+    <parent
+      link="LiDARSupport" />
+    <child
+      link="LiDAR" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="DiffBar">
+    <inertial>
+      <origin
+        xyz="-2.3069E-08 1.8739E-07 0.043691"
+        rpy="0 0 0" />
+      <mass
+        value="0.60001" />
+      <inertia
+        ixx="0.0056324"
+        ixy="-1.0197E-09"
+        ixz="-5.914E-10"
+        iyy="0.0002223"
+        iyz="-2.9455E-09"
+        izz="0.0055642" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/DiffBar.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/DiffBar.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_Body_DiffBar"
+    type="continuous">
+    <origin
+      xyz="0.3 0 -0.6"
+      rpy="0 0 0" />
+    <parent
+      link="Body" />
+    <child
+      link="DiffBar" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="RightDiffBarLink">
+    <inertial>
+      <origin
+        xyz="-2.7756E-16 1.1102E-16 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.14953" />
+      <inertia
+        ixx="1.4863E-05"
+        ixy="-8.5654E-20"
+        ixz="-1.1279E-19"
+        iyy="0.001995"
+        iyz="5.1067E-12"
+        izz="0.001995" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/RightDiffBarLink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/RightDiffBarLink.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_DiffBar_RightDiffBarLink"
+    type="continuous">
+    <origin
+      xyz="-0.15 -0.2 0.045"
+      rpy="0 0 0" />
+    <parent
+      link="DiffBar" />
+    <child
+      link="RightDiffBarLink" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="LeftDiffBarLink">
+    <inertial>
+      <origin
+        xyz="1.6653E-16 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.14953" />
+      <inertia
+        ixx="1.4863E-05"
+        ixy="1.3794E-20"
+        ixz="1.003E-19"
+        iyy="0.001995"
+        iyz="1.3525E-11"
+        izz="0.001995" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/LeftDiffBarLink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/LeftDiffBarLink.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_DiffBar_LeftDiffBarLink"
+    type="continuous">
+    <origin
+      xyz="-0.15 0.2 0.045"
+      rpy="0 0 0" />
+    <parent
+      link="DiffBar" />
+    <child
+      link="LeftDiffBarLink" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="RightMainRocket">
+    <inertial>
+      <origin
+        xyz="0.11317 -0.083287 -0.0033099"
+        rpy="0 0 0" />
+      <mass
+        value="3.9698" />
+      <inertia
+        ixx="0.029658"
+        ixy="0.058353"
+        ixz="-6.7156E-05"
+        iyy="0.40048"
+        iyz="0.0010399"
+        izz="0.42705" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/RightMainRocket.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/RightMainRocket.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_Body_RightMainRocket"
+    type="continuous">
+    <origin
+      xyz="0 -0.4 -0.455"
+      rpy="0 0 0" />
+    <parent
+      link="Body" />
+    <child
+      link="RightMainRocket" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="BogieRF">
+    <inertial>
+      <origin
+        xyz="1.1102E-16 0.043694 -0.10834"
+        rpy="0 0 0" />
+      <mass
+        value="0.97559" />
+      <inertia
+        ixx="0.012957"
+        ixy="5.7596E-19"
+        ixz="7.2649E-18"
+        iyy="0.0096917"
+        iyz="0.00058661"
+        izz="0.0043433" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/BogieRF.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/BogieRF.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_RightMainRocket_BogieRF"
+    type="continuous">
+    <origin
+      xyz="0.76252 -0.2 -0.035"
+      rpy="0 0 0" />
+    <parent
+      link="RightMainRocket" />
+    <child
+      link="BogieRF" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="WheelRF">
+    <inertial>
+      <origin
+        xyz="8.8818E-16 0 -2.3315E-15"
+        rpy="0 0 0" />
+      <mass
+        value="0.78656" />
+      <inertia
+        ixx="0.009468"
+        ixy="1.973E-20"
+        ixz="-7.0807E-18"
+        iyy="0.015284"
+        iyz="-1.8111E-18"
+        izz="0.009468" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/WheelRF.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/WheelRF.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_BogieRF_WheelRF"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.235"
+      rpy="0 0 0" />
+    <parent
+      link="BogieRF" />
+    <child
+      link="WheelRF" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="RightViceRocket">
+    <inertial>
+      <origin
+        xyz="0.14469 -0.10519 -0.13316"
+        rpy="0 0 0" />
+      <mass
+        value="3.1788" />
+      <inertia
+        ixx="0.057106"
+        ixy="0.024643"
+        ixz="0.091961"
+        iyy="0.26287"
+        iyz="-0.013339"
+        izz="0.22749" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/RightViceRocket.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/RightViceRocket.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_RightMainRocket_RightViceRocket"
+    type="continuous">
+    <origin
+      xyz="-0.4 -0.12 -0.005"
+      rpy="0 0 0" />
+    <parent
+      link="RightMainRocket" />
+    <child
+      link="RightViceRocket" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="WheelRM">
+    <inertial>
+      <origin
+        xyz="2.387E-15 -5.9952E-15 2.2204E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.78656" />
+      <inertia
+        ixx="0.009468"
+        ixy="6.6562E-22"
+        ixz="2.2238E-18"
+        iyy="0.015284"
+        iyz="7.6463E-22"
+        izz="0.009468" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/WheelRM.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/WheelRM.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_RightViceRocket_WheelRM"
+    type="continuous">
+    <origin
+      xyz="0.4 -0.239 -0.265"
+      rpy="0 0 0" />
+    <parent
+      link="RightViceRocket" />
+    <child
+      link="WheelRM" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="BogieRR">
+    <inertial>
+      <origin
+        xyz="0 0.043694 -0.10834"
+        rpy="0 0 0" />
+      <mass
+        value="0.97559" />
+      <inertia
+        ixx="0.012957"
+        ixy="1.5156E-18"
+        ixz="5.1012E-18"
+        iyy="0.0096917"
+        iyz="0.00058661"
+        izz="0.0043433" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/BogieRR.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/BogieRR.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_RightViceRocket_BogieRR"
+    type="continuous">
+    <origin
+      xyz="-0.388 -0.08 -0.03"
+      rpy="0 0 0" />
+    <parent
+      link="RightViceRocket" />
+    <child
+      link="BogieRR" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="WheelRR">
+    <inertial>
+      <origin
+        xyz="2.4425E-15 2.2204E-16 4.4409E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.78656" />
+      <inertia
+        ixx="0.009468"
+        ixy="1.3111E-18"
+        ixz="2.4375E-18"
+        iyy="0.015284"
+        iyz="-7.9413E-19"
+        izz="0.009468" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/WheelRR.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/WheelRR.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_BogieRR_WheelRR"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.235"
+      rpy="0 0 0" />
+    <parent
+      link="BogieRR" />
+    <child
+      link="WheelRR" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="LeftMainRocket">
+    <inertial>
+      <origin
+        xyz="0.11317 0.083287 -0.0033099"
+        rpy="0 0 0" />
+      <mass
+        value="3.9698" />
+      <inertia
+        ixx="0.029658"
+        ixy="-0.058353"
+        ixz="-6.7156E-05"
+        iyy="0.40048"
+        iyz="-0.0010399"
+        izz="0.42705" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/LeftMainRocket.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/LeftMainRocket.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_Body_LeftMainRocket"
+    type="continuous">
+    <origin
+      xyz="0 0.4 -0.455"
+      rpy="0 0 0" />
+    <parent
+      link="Body" />
+    <child
+      link="LeftMainRocket" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="BogieLF">
+    <inertial>
+      <origin
+        xyz="-1.0103E-14 -0.043694 -0.10834"
+        rpy="0 0 0" />
+      <mass
+        value="0.97559" />
+      <inertia
+        ixx="0.012957"
+        ixy="-7.4927E-16"
+        ixz="-1.4026E-16"
+        iyy="0.0096917"
+        iyz="-0.00058661"
+        izz="0.0043433" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/BogieLF.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/BogieLF.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_LeftMainRocket_BogieLF"
+    type="continuous">
+    <origin
+      xyz="0.76252 0.2 -0.035"
+      rpy="0 0 0" />
+    <parent
+      link="LeftMainRocket" />
+    <child
+      link="BogieLF" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="WheelLF">
+    <inertial>
+      <origin
+        xyz="-2.609E-15 -9.8532E-16 -2.2204E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.78656" />
+      <inertia
+        ixx="0.009468"
+        ixy="4.9247E-16"
+        ixz="1.8014E-18"
+        iyy="0.015284"
+        iyz="4.3225E-16"
+        izz="0.009468" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/WheelLF.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/WheelLF.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_BogieLF_WheelLF"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.235"
+      rpy="0 0 0" />
+    <parent
+      link="BogieLF" />
+    <child
+      link="WheelLF" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="LeftViceRocket">
+    <inertial>
+      <origin
+        xyz="0.14469 0.10519 -0.13316"
+        rpy="0 0 0" />
+      <mass
+        value="3.1787" />
+      <inertia
+        ixx="0.057103"
+        ixy="-0.024643"
+        ixz="0.091959"
+        iyy="0.26287"
+        iyz="0.013339"
+        izz="0.22749" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/LeftViceRocket.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/LeftViceRocket.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_LeftMainRocket_LeftViceRocket"
+    type="continuous">
+    <origin
+      xyz="-0.4 0.12 -0.005"
+      rpy="0 0 0" />
+    <parent
+      link="LeftMainRocket" />
+    <child
+      link="LeftViceRocket" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="WheelLM">
+    <inertial>
+      <origin
+        xyz="2.5535E-15 -1.0825E-15 -4.4409E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.78656" />
+      <inertia
+        ixx="0.009468"
+        ixy="1.1249E-17"
+        ixz="-2.2339E-18"
+        iyy="0.015284"
+        iyz="-1.6612E-18"
+        izz="0.009468" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/WheelLM.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/WheelLM.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_LeftViceRocket_WheelLM"
+    type="continuous">
+    <origin
+      xyz="0.4 0.239 -0.265"
+      rpy="0 0 0" />
+    <parent
+      link="LeftViceRocket" />
+    <child
+      link="WheelLM" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="BogieLR">
+    <inertial>
+      <origin
+        xyz="0 -0.043694 -0.10834"
+        rpy="0 0 0" />
+      <mass
+        value="0.97559" />
+      <inertia
+        ixx="0.012957"
+        ixy="1.5794E-18"
+        ixz="-5.1731E-18"
+        iyy="0.0096917"
+        iyz="-0.00058661"
+        izz="0.0043433" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/BogieLR.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/BogieLR.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_LeftViceRocket_BogieLR"
+    type="continuous">
+    <origin
+      xyz="-0.388 0.08 -0.03"
+      rpy="0 0 0" />
+    <parent
+      link="LeftViceRocket" />
+    <child
+      link="BogieLR" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="WheelLR">
+    <inertial>
+      <origin
+        xyz="2.4425E-15 -1.3878E-17 7.7716E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.78656" />
+      <inertia
+        ixx="0.009468"
+        ixy="6.2539E-18"
+        ixz="3.9328E-18"
+        iyy="0.015284"
+        iyz="1.8192E-18"
+        izz="0.009468" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/WheelLR.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mars_rover_2/meshes/WheelLR.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="c_BogieLR_WheelLR"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.235"
+      rpy="0 0 0" />
+    <parent
+      link="BogieLR" />
+    <child
+      link="WheelLR" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+</robot>

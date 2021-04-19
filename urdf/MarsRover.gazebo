@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+  <xacro:property name="mu" value="0.5" />
+	<gazebo reference="body">
+		<material>Gazebo/Gold</material>
+	</gazebo>
+	<gazebo reference="LeftMainRocket">
+		<material>Gazebo/Red</material>
+	</gazebo>
+	<gazebo reference="RightMainRocket">
+		<material>Gazebo/Red</material>
+	</gazebo>
+	<gazebo reference="LeftViceRocket">
+		<material>Gazebo/Blue</material>
+	</gazebo>
+	<gazebo reference="RightViceRocket">
+		<material>Gazebo/Blue</material>
+	</gazebo>
+	<gazebo reference="WheelLF">
+		<material>Gazebo/Grey</material>
+		<mu1>${mu}</mu1>
+	</gazebo>
+	<gazebo reference="WheelLM">
+		<material>Gazebo/Grey</material>
+		<mu1>${mu}</mu1>
+	</gazebo>
+	<gazebo reference="WheelLR">
+		<material>Gazebo/Grey</material>
+		<mu1>${mu}</mu1>
+	</gazebo>
+	<gazebo reference="WheelRF">
+		<material>Gazebo/Grey</material>
+		<mu1>${mu}</mu1>
+	</gazebo>
+	<gazebo reference="WheelRM">
+		<material>Gazebo/Grey</material>
+		<mu1>${mu}</mu1>
+	</gazebo>
+	<gazebo reference="WheelRR">
+		<material>Gazebo/Grey</material>
+		<mu1>${mu}</mu1>
+	</gazebo>
+	<gazebo reference="DiffBar">
+		<material>Gazebo/Green</material>
+	</gazebo>
+	<gazebo reference="LiDARBodyCon">
+		<material>Gazebo/Grey</material>
+	</gazebo>
+	<gazebo reference="LiDARSupport">
+		<material>Gazebo/Grey</material>
+	</gazebo>
+	<gazebo>
+		<!--LINKs-->
+	    <link name='LeftDiffBarLink'>
+	      <!--pose frame=''>0.15 0.2 -0.555 0 0 0</pose-->
+	      <pose frame=''>0 0.2 -0.555 0 0 0</pose>
+	      <inertial>
+	        <!--pose frame=''> 0 0 0 0 0 0</pose-->
+	        <mass>0.200751</mass>
+	        <inertia>
+	          <ixx>1.70942e-05</ixx>
+	          <ixy>1.00927e-19</ixy>
+	          <ixz>4.58491e-19</ixz>
+	          <iyy>0.00141233</iyy>
+	          <iyz>1.74567e-10</iyz>
+	          <izz>0.00141234</izz>
+	        </inertia>
+	      </inertial>
+	      <collision name='LeftDiffBarLink_collision'>
+	        <!--pose frame=''>0 0 0 0 -0 0</pose-->
+	        <geometry>
+	          <mesh>
+	            <scale>1 1 1</scale>
+	            <uri>model://rover/LeftDiffBarLink.STL</uri>
+	          </mesh>
+	        </geometry>
+	      </collision>
+	      <visual name='LeftDiffBarLink_visual'>
+	        <!--pose frame=''>0 0 0 0 -0 0</pose-->
+	        <geometry>
+	          <mesh>
+	            <scale>1 1 1</scale>
+	            <uri>model://rover/LeftDiffBarLink.STL</uri>
+	          </mesh>
+	        </geometry>
+	        <material>
+	        	<script>
+	        		<name>Gazebo/DarkGrey</name>
+	        	</script>
+	        </material>
+	      </visual>
+	    </link>
+	    <link name='RightDiffBarLink'>
+	      <!--pose frame=''>0.15 -0.2 -0.555 0 0 0</pose-->
+	      <pose frame=''>0 -0.2 -0.555 0 0 0</pose>
+	      <inertial>
+	        <!--pose frame=''>0 0 0 0 0 0</pose-->
+	        <mass>0.200751</mass>
+	        <inertia>
+	          <ixx>1.70942e-05</ixx>
+	          <ixy>1.11353e-19</ixy>
+	          <ixz>-5.32414e-19</ixz>
+	          <iyy>0.00141234</iyy>
+	          <iyz>-2.61397e-10</iyz>
+	          <izz>0.00141233</izz>
+	        </inertia>
+	      </inertial>
+	      <collision name='RightDiffBarLink_collision'>
+	        <!--pose frame=''>0 0 0 0 0 0</pose-->
+	        <geometry>
+	          <mesh>
+	            <scale>1 1 1</scale>
+	            <uri>model://rover/RightDiffBarLink.STL</uri>
+	          </mesh>
+	        </geometry>
+	      </collision>  
+	      <visual name='RightDiffBarLink_visual'>
+	        <!--pose frame=''>0 0 0 0 0 0</pose-->
+	        <geometry>
+	          <mesh>
+	            <scale>1 1 1</scale>
+	            <uri>model://rover/RightDiffBarLink.STL</uri>
+	          </mesh>
+	        </geometry>
+	        <material>
+	        	<script>
+	        		<name>Gazebo/DarkGrey</name>
+	        	</script>
+	        </material>
+	      </visual>
+	    </link>
+	    <!--JOINTs-->
+		<joint name="b_LeftMainRocket_DiffBarLink" type="ball">
+			<parent>LeftMainRocket</parent>
+			<child>LeftDiffBarLink</child>
+			<!--origin xyz="-0.15 0 0" rpy="0 0 0"/-->
+			<!--pose>-0.15 0 0 0 0 0</pose-->
+		</joint>
+		<joint name="b_RightMainRocket_DiffBarLink" type="ball">
+			<parent>RightMainRocket</parent>
+			<child>RightDiffBarLink</child>
+			<!--pose>-0.15 0 0 0 0 0</pose--> 
+		</joint>
+		<joint name="b_DiffBar_LeftDiffBarLink" type="ball">
+			<parent>LeftDiffBarLink</parent>
+			<child>DiffBar</child>
+			<pose>0 0.2 0.045 0 0 0</pose>
+		</joint>
+		<joint name="b_DiffBar_RightDiffBarLink" type="ball">
+			<parent>RightDiffBarLink</parent>
+			<child>DiffBar</child>
+			<pose>0 -0.2 0.045 0 0 0</pose>
+		</joint>
+	</gazebo>
+
+	<!--Plugins-->
+	<gazebo><![CDATA[
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+			<robotNamespace>MarsRover</robotNamespace>
+			<!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
+		</plugin>]]>
+
+		<!--this plugin publish topic '/joint_states'-->
+		<plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+			<jointName>c_Body_DiffBar,c_Body_LeftMainRocket,c_LeftMainRocket_LeftViceRocket,c_LeftViceRocket_WheelLM,c_LeftViceRocket_BogieLR,c_BogieLR_WheelLR,c_LeftMainRocket_BogieLF,c_BogieLF_WheelLF,c_Body_RightMainRocket,c_RightMainRocket_RightViceRocket,c_RightViceRocket_WheelRM,c_RightViceRocket_BogieRR,c_BogieRR_WheelRR,c_RightMainRocket_BogieRF,c_BogieRF_WheelRF</jointName>
+			<updateRate>100.0</updateRate>
+		</plugin>
+
+		<!--this plugin drive rover's wheel for motion-->
+		<plugin name="skid_steer_drive_controller" filename="$(find mars_rover_2)/plugins/MarsRoverDriver/build/libMarsRoverDriver_plugins.so">
+			<updateRate>100.0</updateRate>
+			<RFWheelJoint>c_BogieRF_WheelRF</RFWheelJoint>
+			<LFWheelJoint>c_BogieLF_WheelLF</LFWheelJoint>
+			<RRWheelJoint>c_BogieRR_WheelRR</RRWheelJoint>
+			<LRWheelJoint>c_BogieLR_WheelLR</LRWheelJoint>
+			<RFBogieJoint>c_RightMainRocket_BogieRF</RFBogieJoint>
+			<LFBogieJoint>c_LeftMainRocket_BogieLF</LFBogieJoint>
+			<RRBogieJoint>c_RightViceRocket_BogieRR</RRBogieJoint>
+			<LRBogieJoint>c_LeftViceRocket_BogieLR</LRBogieJoint>
+			<wheelSeparation>1.2</wheelSeparation><!--wheel distance between L&R-->
+			<wheelBase>1.55052</wheelBase>
+			<wheelDiameter>0.3</wheelDiameter>
+			<commandTopic>cmd_vel</commandTopic>
+			<PathTopic>abs_path</PathTopic>
+			<odometryTopic>odom</odometryTopic>
+			<robotBaseFrame>world</robotBaseFrame>
+			<odometryFrame>body</odometryFrame>
+			<torque>100</torque>
+			<broadcastTF>1</broadcastTF>
+			<LiDARtoBody_w>0.843</LiDARtoBody_w>
+			<LiDARtoBody_x>0.000</LiDARtoBody_x>
+			<LiDARtoBody_y>0.573</LiDARtoBody_y>
+			<LiDARtoBody_z>0.000</LiDARtoBody_z>
+			<LiDARtoBody_tx>0.716</LiDARtoBody_tx>
+			<LiDARtoBody_ty>0.000</LiDARtoBody_ty>
+			<LiDARtoBody_tz>0.061</LiDARtoBody_tz>
+		</plugin>
+	</gazebo>
+</robot>
