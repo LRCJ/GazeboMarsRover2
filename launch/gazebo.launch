@@ -10,8 +10,8 @@
   <arg name="debug" default="false" />
   <arg name="physics" default="ode"/>
   <arg name="verbose" default="true"/>
-  <!--arg name="world_name" default="$(find mars_rover_2)/urdf/MarsTerrain.world"/-->
-  <arg name="world_name" default="$(find mars_rover_2)/urdf/empty.world"/>
+  <arg name="world_name" default="$(find mars_rover_2)/urdf/MarsTerrain.world"/>
+  <!--arg name="world_name" default="$(find mars_rover_2)/urdf/empty.world"/-->
   <arg name="use_clock_frequency" default="false"/>
   <arg name="pub_clock_frequency" default="100"/>
   <arg name="enable_ros_network" default="true" />

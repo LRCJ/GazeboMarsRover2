@@ -195,5 +195,19 @@
 			<LiDARtoBody_ty>0.000</LiDARtoBody_ty>
 			<LiDARtoBody_tz>0.061</LiDARtoBody_tz>
 		</plugin>
+
+		<!--this plugin get the relative pose and vel between links--><![CDATA[
+		<plugin name="WRF_RotationRate" filename="$(find mars_rover_2)/plugins/ComputeSkidRate/build/libComputeSkidRate_plugins.so"><!--,libgazebo_ros_p3d.so-->
+			<bodyName>WheelRF</bodyName>
+			<frameName>BogieRF</frameName>
+			<topicName>WRF_RotationRate</topicName>
+			<updateRate>30</updateRate>
+		</plugin>
+		<plugin name="WRF_Vel" filename="$(find mars_rover_2)/plugins/ComputeSkidRate/build/libComputeSkidRate_plugins.so">
+			<bodyName>WheelRF</bodyName>
+			<frameName>world</frameName>
+			<topicName>WRF_Vel</topicName>
+			<updateRate>30</updateRate>
+		</plugin>]]>
 	</gazebo>
 </robot>

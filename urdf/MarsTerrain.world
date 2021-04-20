@@ -41,7 +41,7 @@
             <heading_deg>0</heading_deg>
         </spherical_coordinates>
         <model name='MarsTerrain'>
-            <pose>0 0 0 0 0 0</pose>
+            <pose>0 0 0.5 0 0 0</pose>
             <static>true</static>
             <allow_auto_disable>1</allow_auto_disable>
             <link name='MarsTerrain'>

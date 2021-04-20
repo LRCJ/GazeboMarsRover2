@@ -101,8 +101,8 @@
             <max_range>${max_range}</max_range>
             <gaussianNoise>${noise}</gaussianNoise>
             <min_intensity>0</min_intensity>
-            <ignoreAzimuthAngleUp>0.7</ignoreAzimuthAngleUp>
-            <ignoreAzimuthAngleLow>-0.7</ignoreAzimuthAngleLow>
+            <ignoreAzimuthAngleUp>0.9</ignoreAzimuthAngleUp>
+            <ignoreAzimuthAngleLow>-0.9</ignoreAzimuthAngleLow>
             <ignoreScanIDUp>27</ignoreScanIDUp>
             <ignoreScanIDLow>-1</ignoreScanIDLow>
           </plugin>
