@@ -48,15 +48,22 @@
 
 namespace gazebo
 {
-  class GazeboRosP3D : public ModelPlugin
+  class GazeboComputeSkidRate : public ModelPlugin
   {
-    public: GazeboRosP3D();
+    public: GazeboComputeSkidRate();
 
-    public: virtual ~GazeboRosP3D();
+    public: virtual ~GazeboComputeSkidRate();
 
     public: void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf);
 
     protected: virtual void UpdateChild();
+
+private:
+    void ComputeRelativeVel(const std::string &LinkName,\
+                            const std::string &RefLinkName,\
+                            ignition::math::Pose3d &LinkPose,\
+                            ignition::math::Vector3d &LinkVelocity,\
+                            ignition::math::Vector3d &LinkAngular);
 
     private: physics::WorldPtr world_;
     private: physics::ModelPtr model_;
@@ -64,6 +71,17 @@ namespace gazebo
     private: physics::LinkPtr link_;
 
     private: physics::LinkPtr reference_link_;
+
+
+    //link name
+private:
+    physics::LinkPtr WheelLink[6];//车轮link
+    physics::LinkPtr WheelRotRateRefLink[6];//获取车轮转速的参考link
+    physics::LinkPtr GlobalRefLink;//车轮全局速度的参考link
+
+    std::string WheelLinkName[6];
+    std::string WheelRotRateRefLinkName[6];
+    std::string GlobalRefLinkName;
 
 
     private: ros::NodeHandle* rosnode_;

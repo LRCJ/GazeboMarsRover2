@@ -23,18 +23,28 @@
 
 namespace gazebo
 {
-    GZ_REGISTER_MODEL_PLUGIN(GazeboRosP3D);
+    GZ_REGISTER_MODEL_PLUGIN(GazeboComputeSkidRate);
+
+    enum
+    {
+        RF=0,
+        LF=1,
+        RM=2,
+        LM=3,
+        RR=4,
+        LR=5,
+    };
 
     // Constructor
-    GazeboRosP3D::GazeboRosP3D()
+    GazeboComputeSkidRate::GazeboComputeSkidRate()
     {
         this->seed = 0;
     }
 
     // Destructor
-    GazeboRosP3D::~GazeboRosP3D()
+    GazeboComputeSkidRate::~GazeboComputeSkidRate()
     {
-        event::Events::ConnectWorldUpdateEnd(boost::bind(&GazeboRosP3D::UpdateChild, this));
+        event::Events::ConnectWorldUpdateEnd(boost::bind(&GazeboComputeSkidRate::UpdateChild, this));
         // Finalize the controller
         this->rosnode_->shutdown();
         this->p3d_queue_.clear();
@@ -44,7 +54,7 @@ namespace gazebo
     }
 
 // Load the controller
-    void GazeboRosP3D::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
+    void GazeboComputeSkidRate::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
     {
         // Get the world name.
         this->world_ = _parent->GetWorld();
@@ -181,26 +191,76 @@ namespace gazebo
 
 
         // start custom queue for p3d
-        this->callback_queue_thread_ = boost::thread(boost::bind(&GazeboRosP3D::P3DQueueThread, this));
+        this->callback_queue_thread_ = boost::thread(boost::bind(&GazeboComputeSkidRate::P3DQueueThread, this));
 
         // New Mechanism for Updating every World Cycle
         // Listen to the update event. This event is broadcast every
         // simulation iteration.
-        this->update_connection_ = event::Events::ConnectWorldUpdateBegin(boost::bind(&GazeboRosP3D::UpdateChild, this));
+        this->update_connection_ = event::Events::ConnectWorldUpdateBegin(boost::bind(&GazeboComputeSkidRate::UpdateChild, this));
     }
 
-// Update the controller
-void GazeboRosP3D::UpdateChild()
+void GazeboComputeSkidRate::ComputeRelativeVel(const std::string &LinkName,\
+                                               const std::string &RefLinkName,\
+                                               ignition::math::Pose3d &LinkPose,\
+                                               ignition::math::Vector3d &LinkVelocity,\
+                                               ignition::math::Vector3d &LinkAngular)
 {
-  if (!this->link_)
-    return;
+    // get links
+    gazebo::physics::LinkPtr Link;
+    gazebo::physics::LinkPtr RefLink;
+    Link = this->model_->GetLink(LinkName);
+    if(!Link)
+    {
+        ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", LinkName.c_str());
+        return;  
+    }
 
-  common::Time cur_time = this->world_->SimTime();
 
-  // rate control
-  if (this->update_rate_ > 0 &&
-      (cur_time-this->last_time_).Double() < (1.0/this->update_rate_))
-    return;
+    // get the relative pose & vel between Link & GlobalLink(world)
+    LinkVelocity = Link->WorldLinearVel();
+    LinkAngular = Link->WorldAngularVel();
+    LinkPose = Link->WorldPose();
+
+    // if ref link is world, do not transform coordinate
+    if(RefLinkName != "/world" &&
+       RefLinkName != "world" &&
+       RefLinkName != "/map" &&
+       RefLinkName != "map")
+    {
+        RefLink = this->model_->GetLink(RefLinkName);
+        if(!RefLink)
+        {
+            ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", RefLinkName.c_str());
+            return;  
+        }
+        // get the relative pose & vel between RefLink & GlobalLink(world)
+        auto RefLinkVelocity = RefLink->WorldLinearVel();
+        auto RefLinkAngular = RefLink->WorldAngularVel();
+        auto RefLinkPose = RefLink->WorldPose();
+
+        // compute the relative pose & vel between Link & RefLink
+        // convert to relative pose
+        LinkPose.Pos() = LinkPose.Pos() - RefLinkPose.Pos();
+        LinkPose.Pos() = RefLinkPose.Rot().RotateVectorReverse(LinkPose.Pos());
+        LinkPose.Rot() *= RefLinkPose.Rot().Inverse();
+        // convert to relative rates
+        // source code is wrong, It should use RotateVectorReverse instead of RotateVector.
+        LinkVelocity = RefLinkPose.Rot().RotateVectorReverse(LinkVelocity - RefLinkVelocity);
+        LinkAngular = RefLinkPose.Rot().RotateVectorReverse(LinkAngular - RefLinkAngular);
+    }
+}
+
+// Update the controller
+void GazeboComputeSkidRate::UpdateChild()
+{
+    if (!this->link_)
+        return;
+
+    common::Time cur_time = this->world_->SimTime();
+
+    // rate control
+    if ( this->update_rate_ > 0 && (cur_time-this->last_time_).Double() < (1.0/this->update_rate_) )
+        return;
 
   if (this->pub_.getNumSubscribers() > 0)
   {
@@ -220,30 +280,38 @@ void GazeboRosP3D::UpdateChild()
         this->pose_msg_.child_frame_id = this->link_name_;
 
         ignition::math::Pose3<double> pose, frame_pose;
+        ignition::math::Vector3<double> vpos;
+        ignition::math::Vector3<double> veul;
         ignition::math::Vector3<double> frame_vpos;
         ignition::math::Vector3<double> frame_veul;
 
-        // get inertial Rates
-        ignition::math::Vector3<double> vpos = this->link_->WorldLinearVel();
-        ignition::math::Vector3<double> veul = this->link_->WorldAngularVel();
+        // // get inertial Rates
+        // vpos = this->link_->WorldLinearVel();
+        // veul = this->link_->WorldAngularVel();
 
-        // Get Pose/Orientation
-        pose = this->link_->WorldPose();
+        // // Get Pose/Orientation
+        // pose = this->link_->WorldPose();
 
-        // Apply Reference Frame
-        if (this->reference_link_)
-        {
-          // convert to relative pose
-          frame_pose = this->reference_link_->WorldPose();
-          pose.Pos() = pose.Pos() - frame_pose.Pos();
-          pose.Pos() = frame_pose.Rot().RotateVectorReverse(pose.Pos());
-          pose.Rot() *= frame_pose.Rot().Inverse();
-          // convert to relative rates
-          frame_vpos = this->reference_link_->WorldLinearVel();
-          frame_veul = this->reference_link_->WorldAngularVel();
-          vpos = frame_pose.Rot().RotateVector(vpos - frame_vpos);
-          veul = frame_pose.Rot().RotateVector(veul - frame_veul);
-        }
+        // // Apply Reference Frame
+        // if (this->reference_link_)
+        // {
+        //   // convert to relative pose
+        //   frame_pose = this->reference_link_->WorldPose();
+        //   pose.Pos() = pose.Pos() - frame_pose.Pos();
+        //   pose.Pos() = frame_pose.Rot().RotateVectorReverse(pose.Pos());
+        //   pose.Rot() *= frame_pose.Rot().Inverse();
+        //   // convert to relative rates
+        //   frame_vpos = this->reference_link_->WorldLinearVel();
+        //   frame_veul = this->reference_link_->WorldAngularVel();
+        //   // source code is wrong, It should use RotateVectorReverse instead of RotateVector.
+        //   vpos = frame_pose.Rot().RotateVectorReverse(vpos - frame_vpos);
+        //   veul = frame_pose.Rot().RotateVectorReverse(veul - frame_veul);
+        // }
+
+        ComputeRelativeVel(this->link_name_,this->frame_name_,pose,vpos,veul);
+
+
+        // compute
 
         // Apply Constant Offsets
         // apply xyz offsets and get position and rotation components
@@ -316,7 +384,7 @@ void GazeboRosP3D::UpdateChild()
 }
 
 // Utility for adding noise
-double GazeboRosP3D::GaussianKernel(double mu, double sigma)
+double GazeboComputeSkidRate::GaussianKernel(double mu, double sigma)
 {
   // using Box-Muller transform to generate two independent standard
   // normally disbributed normal variables see wikipedia
@@ -339,7 +407,7 @@ double GazeboRosP3D::GaussianKernel(double mu, double sigma)
 }
 
 // Put laser data to the interface
-void GazeboRosP3D::P3DQueueThread()
+void GazeboComputeSkidRate::P3DQueueThread()
 {
   static const double timeout = 0.01;
 
