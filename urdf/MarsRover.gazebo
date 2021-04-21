@@ -204,11 +204,5 @@
 			<topicName>WRF_RotationRate</topicName>
 			<updateRate>20</updateRate>
 		</plugin>
-		<plugin name="WRF_Vel" filename="$(find mars_rover_2)/plugins/ComputeSkidRate/build/libComputeSkidRate_plugins.so">
-			<bodyName>WheelRF</bodyName>
-			<frameName>world</frameName>
-			<topicName>WRF_Vel</topicName>
-			<updateRate>20</updateRate>
-		</plugin>
 	</gazebo>
 </robot>

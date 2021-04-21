@@ -31,6 +31,8 @@
 
 #include <ros/ros.h>
 #include <nav_msgs/Odometry.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <std_msgs/Float64MultiArray.h>
 
 #include <ros/callback_queue.h>
 #include <ros/advertise_options.h>
@@ -48,89 +50,99 @@
 
 namespace gazebo
 {
-  class GazeboComputeSkidRate : public ModelPlugin
-  {
-    public: GazeboComputeSkidRate();
+    enum WheelIndex
+    {
+        RF=0,
+        LF=1,
+        RM=2,
+        LM=3,
+        RR=4,
+        LR=5,
+    };
 
-    public: virtual ~GazeboComputeSkidRate();
+    class GazeboComputeSkidRate : public ModelPlugin
+    {
+    public:
+        GazeboComputeSkidRate();
+        virtual ~GazeboComputeSkidRate();
+        void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf);
 
-    public: void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf);
-
-    protected: virtual void UpdateChild();
-
-private:
-    void ComputeRelativeVel(const std::string &LinkName,\
-                            const std::string &RefLinkName,\
-                            ignition::math::Pose3d &LinkPose,\
-                            ignition::math::Vector3d &LinkVelocity,\
-                            ignition::math::Vector3d &LinkAngular);
-
-    private: physics::WorldPtr world_;
-    private: physics::ModelPtr model_;
-
-    private: physics::LinkPtr link_;
-
-    private: physics::LinkPtr reference_link_;
-
-
-    //link name
-private:
-    physics::LinkPtr WheelLink[6];//车轮link
-    physics::LinkPtr WheelRotRateRefLink[6];//获取车轮转速的参考link
-    physics::LinkPtr GlobalRefLink;//车轮全局速度的参考link
-
-    std::string WheelLinkName[6];
-    std::string WheelRotRateRefLinkName[6];
-    std::string GlobalRefLinkName;
+    protected:
+        virtual void UpdateChild();
+    private:
+        void ComputeRelativeVel(const std::string &LinkName,\
+                                const std::string &RefLinkName,\
+                                ignition::math::Vector3d &LinkVelocity,\
+                                ignition::math::Vector3d &LinkAngular);
+        void ComputeRelativePose(const std::string &LinkName,\
+                                 const std::string &RefLinkName,\
+                                 ignition::math::Pose3d &Pose);
+        double ComputeSkidRate(const std::string &LinkName,\
+                               const std::string &RefLinkName,\
+                               WheelIndex wi);
+        void P3DQueueThread();
 
 
-    private: ros::NodeHandle* rosnode_;
-    private: ros::Publisher pub_;
-    private: PubQueue<nav_msgs::Odometry>::Ptr pub_Queue;
+        // ros variable
+        ros::NodeHandle* rosnode_;
+        PubQueue<std_msgs::Float64MultiArray>::Ptr PubSkidRateQue_;
+        PubQueue<geometry_msgs::PoseStamped>::Ptr PubWheelVelPoseQue_[6];
+        ros::Publisher SkidRatePub_;
+        ros::Publisher WheelVelPosePub_[6];
+        std::string SkidRateTopicName_;
+        std::string WheelVelPoseTopicName_[6];
 
-    private: nav_msgs::Odometry pose_msg_;
+        // gazebo variable
+        physics::WorldPtr world_;
+        physics::ModelPtr model_;
+        physics::LinkPtr link_;
+        physics::LinkPtr reference_link_;
 
-    private: std::string link_name_;
 
-    private: std::string topic_name_;
+        // data
+        std_msgs::Float64MultiArray SkidRate_;
+        double SkidRateBuf_[6];
 
-    private: std::string frame_name_;
-    private: std::string tf_frame_name_;
+        //link name
+        physics::LinkPtr WheelLink[6];//车轮link
+        physics::LinkPtr WheelRotRateRefLink[6];//获取车轮转速的参考link
+        physics::LinkPtr GlobalRefLink;//车轮全局速度的参考link
 
-    private: ignition::math::Pose3<double> offset_;
+        std::string WheelLinkName[6];
+        std::string WheelRotRateRefLinkName[6];
+        std::string GlobalRefLinkName;
 
-    private: boost::mutex lock;
 
-    private: common::Time last_time_;
-    private: ignition::math::Vector3<double> last_vpos_;
-    private: ignition::math::Vector3<double> last_veul_;
-    private: ignition::math::Vector3<double> apos_;
-    private: ignition::math::Vector3<double> aeul_;
-    private: ignition::math::Vector3<double> last_frame_vpos_;
-    private: ignition::math::Vector3<double> last_frame_veul_;
-    private: ignition::math::Vector3<double> frame_apos_;
-    private: ignition::math::Vector3<double> frame_aeul_;
+
+        nav_msgs::Odometry pose_msg_;
+        std::string link_name_;
+        std::string topic_name_;
+        std::string frame_name_;
+        std::string tf_frame_name_;
+        ignition::math::Pose3<double> offset_;
+        boost::mutex lock;
+        common::Time last_time_;
+        ignition::math::Vector3<double> last_vpos_;
+        ignition::math::Vector3<double> last_veul_;
+        ignition::math::Vector3<double> apos_;
+        ignition::math::Vector3<double> aeul_;
+        ignition::math::Vector3<double> last_frame_vpos_;
+        ignition::math::Vector3<double> last_frame_veul_;
+        ignition::math::Vector3<double> frame_apos_;
+        ignition::math::Vector3<double> frame_aeul_;
 
     // rate control
-    private: double update_rate_;
-
-    private: double gaussian_noise_;
-
-    private: double GaussianKernel(double mu, double sigma);
-
-    private: std::string robot_namespace_;
-
-    private: ros::CallbackQueue p3d_queue_;
-    private: void P3DQueueThread();
-    private: boost::thread callback_queue_thread_;
+        double update_rate_;
+        std::string robot_namespace_;
+        ros::CallbackQueue p3d_queue_;
+        boost::thread callback_queue_thread_;
 
     // Pointer to the update event connection
-    private: event::ConnectionPtr update_connection_;
-
-    private: unsigned int seed;
+        event::ConnectionPtr update_connection_;
+        unsigned int seed;
 
     // ros publish multi queue, prevents publish() blocking
-    private: PubMultiQueue pmq;
+        PubMultiQueue pmq;
   };
 }
 #endif

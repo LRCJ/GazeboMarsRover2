@@ -25,16 +25,6 @@ namespace gazebo
 {
     GZ_REGISTER_MODEL_PLUGIN(GazeboComputeSkidRate);
 
-    enum
-    {
-        RF=0,
-        LF=1,
-        RM=2,
-        LM=3,
-        RR=4,
-        LR=5,
-    };
-
     // Constructor
     GazeboComputeSkidRate::GazeboComputeSkidRate()
     {
@@ -98,29 +88,6 @@ namespace gazebo
         else
             this->frame_name_ = _sdf->GetElement("frameName")->Get<std::string>();
 
-        if (!_sdf->HasElement("xyzOffset"))
-        {
-            ROS_DEBUG("p3d plugin missing <xyzOffset>, defaults to 0s");
-            this->offset_.Pos() = ignition::math::Vector3<double>(0, 0, 0);
-        }
-        else
-            this->offset_.Pos() = _sdf->GetElement("xyzOffset")->Get<ignition::math::Vector3<double>>();
-
-        if (!_sdf->HasElement("rpyOffset"))
-        {
-            ROS_DEBUG("p3d plugin missing <rpyOffset>, defaults to 0s");
-            this->offset_.Rot().Euler(ignition::math::Vector3<double>(0, 0, 0));
-        }
-        else
-            this->offset_.Rot().Euler(_sdf->GetElement("rpyOffset")->Get<ignition::math::Vector3<double>>());
-
-        if (!_sdf->HasElement("gaussianNoise"))
-        {
-            ROS_DEBUG("p3d plugin missing <gaussianNoise>, defaults to 0.0");
-            this->gaussian_noise_ = 0;
-        }
-        else
-            this->gaussian_noise_ = _sdf->GetElement("gaussianNoise")->Get<double>();
 
         if (!_sdf->HasElement("updateRate"))
         {
@@ -149,46 +116,33 @@ namespace gazebo
         this->rosnode_->getParam(std::string("tf_prefix"), prefix);
         this->tf_frame_name_ = tf::resolve(prefix, this->frame_name_);
 
-        if (this->topic_name_ != "")
-        {
-            this->pub_Queue = this->pmq.addPub<nav_msgs::Odometry>();
-            this->pub_ =
-            this->rosnode_->advertise<nav_msgs::Odometry>(this->topic_name_, 1);
-        }
+        this->SkidRateTopicName_ = "/SkidRate";
+        this->WheelVelPoseTopicName_[RF] = "/WRF_VelPose";
+        this->WheelVelPoseTopicName_[LF] = "/WLF_VelPose";
+        this->WheelVelPoseTopicName_[RM] = "/WRM_VelPose";
+        this->WheelVelPoseTopicName_[LM] = "/WLM_VelPose";
+        this->WheelVelPoseTopicName_[RR] = "/WRR_VelPose";
+        this->WheelVelPoseTopicName_[LR] = "/WLR_VelPose";
 
-        this->last_time_ = this->world_->SimTime();
-        // initialize body
-        this->last_vpos_ = this->link_->WorldLinearVel();
-        this->last_veul_ = this->link_->WorldAngularVel();
-        this->apos_ = 0;
-        this->aeul_ = 0;
+        this->PubSkidRateQue_ = this->pmq.addPub<std_msgs::Float64MultiArray>();
+        this->SkidRatePub_ = this->rosnode_->advertise<std_msgs::Float64MultiArray>(this->SkidRateTopicName_, 1);
 
-        // if frameName specified is "/world", "world", "/map" or "map" report
-        // back inertial values in the gazebo world
-        if (this->frame_name_ != "/world" &&
-        this->frame_name_ != "world" &&
-        this->frame_name_ != "/map" &&
-        this->frame_name_ != "map")
-        {
-            this->reference_link_ = this->model_->GetLink(this->frame_name_);
-            if (!this->reference_link_)
-            {
-                ROS_ERROR("gazebo_ros_p3d plugin: frameName: %s does not exist, will"
-        " not publish pose\n", this->frame_name_.c_str());
-                return;
-            }
-        }
+        this->PubWheelVelPoseQue_[RF] = this->pmq.addPub<geometry_msgs::PoseStamped>();
+        this->WheelVelPosePub_[RF] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(this->WheelVelPoseTopicName_[RF], 1);
+        this->PubWheelVelPoseQue_[LF] = this->pmq.addPub<geometry_msgs::PoseStamped>();
+        this->WheelVelPosePub_[LF] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(this->WheelVelPoseTopicName_[LF], 1);
+        this->PubWheelVelPoseQue_[RM] = this->pmq.addPub<geometry_msgs::PoseStamped>();
+        this->WheelVelPosePub_[RM] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(this->WheelVelPoseTopicName_[RM], 1);
+        this->PubWheelVelPoseQue_[LM] = this->pmq.addPub<geometry_msgs::PoseStamped>();
+        this->WheelVelPosePub_[LM] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(this->WheelVelPoseTopicName_[LM], 1);
+        this->PubWheelVelPoseQue_[RR] = this->pmq.addPub<geometry_msgs::PoseStamped>();
+        this->WheelVelPosePub_[RR] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(this->WheelVelPoseTopicName_[RR], 1);
+        this->PubWheelVelPoseQue_[LR] = this->pmq.addPub<geometry_msgs::PoseStamped>();
+        this->WheelVelPosePub_[LR] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(this->WheelVelPoseTopicName_[LR], 1);
 
-        // init reference frame state
-        if (this->reference_link_)
-        {
-            ROS_DEBUG("got body %s", this->reference_link_->GetName().c_str());
-            this->frame_apos_ = 0;
-            this->frame_aeul_ = 0;
-            this->last_frame_vpos_ = this->reference_link_->WorldLinearVel();
-            this->last_frame_veul_ = this->reference_link_->WorldAngularVel();
-        }
 
+        SkidRate_.data.resize(6,0.0);
+        memset(&SkidRateBuf_,0,sizeof(SkidRateBuf_));
 
         // start custom queue for p3d
         this->callback_queue_thread_ = boost::thread(boost::bind(&GazeboComputeSkidRate::P3DQueueThread, this));
@@ -201,7 +155,6 @@ namespace gazebo
 
 void GazeboComputeSkidRate::ComputeRelativeVel(const std::string &LinkName,\
                                                const std::string &RefLinkName,\
-                                               ignition::math::Pose3d &LinkPose,\
                                                ignition::math::Vector3d &LinkVelocity,\
                                                ignition::math::Vector3d &LinkAngular)
 {
@@ -215,10 +168,50 @@ void GazeboComputeSkidRate::ComputeRelativeVel(const std::string &LinkName,\
         return;  
     }
 
-
-    // get the relative pose & vel between Link & GlobalLink(world)
+    // get the relative vel between Link & GlobalLink(world)
     LinkVelocity = Link->WorldLinearVel();
     LinkAngular = Link->WorldAngularVel();
+
+    // if ref link is world, do not transform coordinate
+    if(RefLinkName != "/world" &&
+       RefLinkName != "world" &&
+       RefLinkName != "/map" &&
+       RefLinkName != "map")
+    {
+        RefLink = this->model_->GetLink(RefLinkName);
+        if(!RefLink)
+        {
+            ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", RefLinkName.c_str());
+            return;  
+        }
+        // get the relative vel between RefLink & GlobalLink(world)
+        auto RefLinkVelocity = RefLink->WorldLinearVel();
+        auto RefLinkAngular = RefLink->WorldAngularVel();
+        auto RefLinkPose = RefLink->WorldPose();
+        // compute the relative pose & vel between Link & RefLink
+        // convert to relative vel
+        // source code is wrong, It should use RotateVectorReverse instead of RotateVector.
+        LinkVelocity = RefLinkPose.Rot().RotateVectorReverse(LinkVelocity - RefLinkVelocity);
+        LinkAngular = RefLinkPose.Rot().RotateVectorReverse(LinkAngular - RefLinkAngular);
+    }
+}
+
+void GazeboComputeSkidRate::ComputeRelativePose(const std::string &LinkName,\
+                                                const std::string &RefLinkName,\
+                                                ignition::math::Pose3d &LinkPose)
+{
+    // get links
+    gazebo::physics::LinkPtr Link;
+    gazebo::physics::LinkPtr RefLink;
+    Link = this->model_->GetLink(LinkName);
+    if(!Link)
+    {
+        ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", LinkName.c_str());
+        return;  
+    }
+
+
+    // get the relative pose between Link & GlobalLink(world)
     LinkPose = Link->WorldPose();
 
     // if ref link is world, do not transform coordinate
@@ -233,21 +226,63 @@ void GazeboComputeSkidRate::ComputeRelativeVel(const std::string &LinkName,\
             ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", RefLinkName.c_str());
             return;  
         }
-        // get the relative pose & vel between RefLink & GlobalLink(world)
-        auto RefLinkVelocity = RefLink->WorldLinearVel();
-        auto RefLinkAngular = RefLink->WorldAngularVel();
+        // get the relative pose between RefLink & GlobalLink(world)
         auto RefLinkPose = RefLink->WorldPose();
 
-        // compute the relative pose & vel between Link & RefLink
+        // compute the relative pose between Link & RefLink
         // convert to relative pose
         LinkPose.Pos() = LinkPose.Pos() - RefLinkPose.Pos();
         LinkPose.Pos() = RefLinkPose.Rot().RotateVectorReverse(LinkPose.Pos());
         LinkPose.Rot() *= RefLinkPose.Rot().Inverse();
-        // convert to relative rates
-        // source code is wrong, It should use RotateVectorReverse instead of RotateVector.
-        LinkVelocity = RefLinkPose.Rot().RotateVectorReverse(LinkVelocity - RefLinkVelocity);
-        LinkAngular = RefLinkPose.Rot().RotateVectorReverse(LinkAngular - RefLinkAngular);
     }
+}
+
+double GazeboComputeSkidRate::ComputeSkidRate(const std::string &LinkName,\
+                                              const std::string &RefLinkName,\
+                                              WheelIndex wi)
+{
+    ignition::math::Pose3d pose;
+    ignition::math::Vector3d vel,angular;
+    // compute Wheel Rotation Rate
+    ComputeRelativeVel(LinkName,RefLinkName,vel,angular);
+    double rr = angular.Y();
+    // compute Wheel Velocity in world coordinate
+    ComputeRelativeVel(LinkName,std::string("world"),vel,angular);
+    double vel_mag = std::sqrt(vel.X()*vel.X()+vel.Y()*vel.Y()+vel.Z()*vel.Z());
+    if( abs(vel_mag)<1.0e-6 || abs(rr)<1.0e-6 )
+        return 0;
+    //double SkidRate = (rr*0.15-vel_mag)/(rr*0.15);
+    double SkidRate = (vel_mag)/(rr*0.15);
+    if(SkidRate>2 || SkidRate<-2)
+        return 0;
+
+    // publish link vel pose
+    geometry_msgs::PoseStamped WheelVelPose;
+    WheelVelPose.header.stamp = ros::Time::now();
+    WheelVelPose.header.frame_id = "world";
+
+    ignition::math::Vector3d vx(vel);
+    vx.Normalize();
+    ComputeRelativePose(LinkName,std::string("world"),pose);
+    ignition::math::Matrix3d m(pose.Rot());
+    ignition::math::Vector3d vy(m(0,1),m(1,1),m(2,1));
+    vy.Normalize();
+    ignition::math::Vector3d vz = vx.Cross(vy);
+    vz.Normalize();
+    m.Axes(vx,vy,vz);
+    ignition::math::Quaterniond q(m);
+
+    WheelVelPose.pose.position.x = pose.Pos().X();
+    WheelVelPose.pose.position.y = pose.Pos().Y();
+    WheelVelPose.pose.position.z = pose.Pos().Z();
+    WheelVelPose.pose.orientation.x = q.X();
+    WheelVelPose.pose.orientation.y = q.Y();
+    WheelVelPose.pose.orientation.z = q.Z();
+    WheelVelPose.pose.orientation.w = q.W();
+    
+    this->PubWheelVelPoseQue_[wi]->push(WheelVelPose,this->WheelVelPosePub_[wi]);
+
+    return SkidRate;
 }
 
 // Update the controller
@@ -261,149 +296,32 @@ void GazeboComputeSkidRate::UpdateChild()
     // rate control
     if ( this->update_rate_ > 0 && (cur_time-this->last_time_).Double() < (1.0/this->update_rate_) )
         return;
-
-  if (this->pub_.getNumSubscribers() > 0)
-  {
     // differentiate to get accelerations
     double tmp_dt = cur_time.Double() - this->last_time_.Double();
     if (tmp_dt != 0)
     {
-      this->lock.lock();
+        this->lock.lock();
 
-      if (this->topic_name_ != "")
-      {
-        // copy data into pose message
-        this->pose_msg_.header.frame_id = this->tf_frame_name_;
-        this->pose_msg_.header.stamp.sec = cur_time.sec;
-        this->pose_msg_.header.stamp.nsec = cur_time.nsec;
+        SkidRateBuf_[RF] = ComputeSkidRate("WheelRF","BogieRF",RF);
+        abs(SkidRateBuf_[RF])<1.0e-6?:this->SkidRate_.data[RF] = SkidRateBuf_[RF];
+        SkidRateBuf_[LF] = ComputeSkidRate("WheelLF","BogieLF",LF);
+        abs(SkidRateBuf_[LF])<1.0e-6?:this->SkidRate_.data[LF] = SkidRateBuf_[LF];
+        SkidRateBuf_[RM] = ComputeSkidRate("WheelRM","RightViceRocket",RM);
+        abs(SkidRateBuf_[RM])<1.0e-6?:this->SkidRate_.data[RM] = SkidRateBuf_[RM];
+        SkidRateBuf_[LM] = ComputeSkidRate("WheelLM","LeftViceRocket",LM);
+        abs(SkidRateBuf_[LM])<1.0e-6?:this->SkidRate_.data[LM] = SkidRateBuf_[LM];
+        SkidRateBuf_[RR] = ComputeSkidRate("WheelRR","BogieRR",RR);
+        abs(SkidRateBuf_[RR])<1.0e-6?:this->SkidRate_.data[RR] = SkidRateBuf_[RR];
+        SkidRateBuf_[LR] = ComputeSkidRate("WheelLR","BogieLR",LR);
+        abs(SkidRateBuf_[LR])<1.0e-6?:this->SkidRate_.data[LR] = SkidRateBuf_[LR];
 
-        this->pose_msg_.child_frame_id = this->link_name_;
+        this->lock.unlock();
 
-        ignition::math::Pose3<double> pose, frame_pose;
-        ignition::math::Vector3<double> vpos;
-        ignition::math::Vector3<double> veul;
-        ignition::math::Vector3<double> frame_vpos;
-        ignition::math::Vector3<double> frame_veul;
+        this->PubSkidRateQue_->push(this->SkidRate_, this->SkidRatePub_);
 
-        // // get inertial Rates
-        // vpos = this->link_->WorldLinearVel();
-        // veul = this->link_->WorldAngularVel();
-
-        // // Get Pose/Orientation
-        // pose = this->link_->WorldPose();
-
-        // // Apply Reference Frame
-        // if (this->reference_link_)
-        // {
-        //   // convert to relative pose
-        //   frame_pose = this->reference_link_->WorldPose();
-        //   pose.Pos() = pose.Pos() - frame_pose.Pos();
-        //   pose.Pos() = frame_pose.Rot().RotateVectorReverse(pose.Pos());
-        //   pose.Rot() *= frame_pose.Rot().Inverse();
-        //   // convert to relative rates
-        //   frame_vpos = this->reference_link_->WorldLinearVel();
-        //   frame_veul = this->reference_link_->WorldAngularVel();
-        //   // source code is wrong, It should use RotateVectorReverse instead of RotateVector.
-        //   vpos = frame_pose.Rot().RotateVectorReverse(vpos - frame_vpos);
-        //   veul = frame_pose.Rot().RotateVectorReverse(veul - frame_veul);
-        // }
-
-        ComputeRelativeVel(this->link_name_,this->frame_name_,pose,vpos,veul);
-
-
-        // compute
-
-        // Apply Constant Offsets
-        // apply xyz offsets and get position and rotation components
-        pose.Pos() = pose.Pos() + this->offset_.Pos();
-        // apply rpy offsets
-        pose.Rot() = this->offset_.Rot()*pose.Rot();
-        pose.Rot().Normalize();
-
-        // compute accelerations (not used)
-        this->apos_ = (this->last_vpos_ - vpos) / tmp_dt;
-        this->aeul_ = (this->last_veul_ - veul) / tmp_dt;
-        this->last_vpos_ = vpos;
-        this->last_veul_ = veul;
-
-        this->frame_apos_ = (this->last_frame_vpos_ - frame_vpos) / tmp_dt;
-        this->frame_aeul_ = (this->last_frame_veul_ - frame_veul) / tmp_dt;
-        this->last_frame_vpos_ = frame_vpos;
-        this->last_frame_veul_ = frame_veul;
-
-        // Fill out messages
-        this->pose_msg_.pose.pose.position.x    = pose.Pos().X();
-        this->pose_msg_.pose.pose.position.y    = pose.Pos().Y();
-        this->pose_msg_.pose.pose.position.z    = pose.Pos().Z();
-
-        this->pose_msg_.pose.pose.orientation.x = pose.Rot().X();
-        this->pose_msg_.pose.pose.orientation.y = pose.Rot().Y();
-        this->pose_msg_.pose.pose.orientation.z = pose.Rot().Z();
-        this->pose_msg_.pose.pose.orientation.w = pose.Rot().W();
-
-        this->pose_msg_.twist.twist.linear.x  = vpos.X() +
-          this->GaussianKernel(0, this->gaussian_noise_);
-        this->pose_msg_.twist.twist.linear.y  = vpos.Y() +
-          this->GaussianKernel(0, this->gaussian_noise_);
-        this->pose_msg_.twist.twist.linear.z  = vpos.Z() +
-          this->GaussianKernel(0, this->gaussian_noise_);
-        // pass euler angular rates
-        this->pose_msg_.twist.twist.angular.x = veul.X() +
-          this->GaussianKernel(0, this->gaussian_noise_);
-        this->pose_msg_.twist.twist.angular.y = veul.Y()+
-          this->GaussianKernel(0, this->gaussian_noise_);
-        this->pose_msg_.twist.twist.angular.z = veul.Z() +
-          this->GaussianKernel(0, this->gaussian_noise_);
-
-        // fill in covariance matrix
-        double gn2 = this->gaussian_noise_*this->gaussian_noise_;
-        this->pose_msg_.pose.covariance[0] = gn2;
-        this->pose_msg_.pose.covariance[7] = gn2;
-        this->pose_msg_.pose.covariance[14] = gn2;
-        this->pose_msg_.pose.covariance[21] = gn2;
-        this->pose_msg_.pose.covariance[28] = gn2;
-        this->pose_msg_.pose.covariance[35] = gn2;
-
-        this->pose_msg_.twist.covariance[0] = gn2;
-        this->pose_msg_.twist.covariance[7] = gn2;
-        this->pose_msg_.twist.covariance[14] = gn2;
-        this->pose_msg_.twist.covariance[21] = gn2;
-        this->pose_msg_.twist.covariance[28] = gn2;
-        this->pose_msg_.twist.covariance[35] = gn2;
-
-        // publish to ros
-        this->pub_Queue->push(this->pose_msg_, this->pub_);
-      }
-
-      this->lock.unlock();
-
-      // save last time stamp
-      this->last_time_ = cur_time;
+        // save last time stamp
+        this->last_time_ = cur_time;
     }
-  }
-}
-
-// Utility for adding noise
-double GazeboComputeSkidRate::GaussianKernel(double mu, double sigma)
-{
-  // using Box-Muller transform to generate two independent standard
-  // normally disbributed normal variables see wikipedia
-
-  // normalized uniform random variable
-  double U = static_cast<double>(rand_r(&this->seed)) /
-             static_cast<double>(RAND_MAX);
-
-  // normalized uniform random variable
-  double V = static_cast<double>(rand_r(&this->seed)) /
-             static_cast<double>(RAND_MAX);
-
-  double X = sqrt(-2.0 * ::log(U)) * cos(2.0*M_PI * V);
-  // double Y = sqrt(-2.0 * ::log(U)) * sin(2.0*M_PI * V);
-
-  // there are 2 indep. vars, we'll just use X
-  // scale to our mu and sigma
-  X = sigma * X + mu;
-  return X;
 }
 
 // Put laser data to the interface
