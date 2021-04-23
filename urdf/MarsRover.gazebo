@@ -199,10 +199,23 @@
 		<!---->
 		<!--this plugin get the relative pose and vel between links-->
 		<plugin name="WRF_RotationRate" filename="$(find mars_rover_2)/plugins/ComputeSkidRate/build/libComputeSkidRate_plugins.so"><!--,libgazebo_ros_p3d.so-->
-			<bodyName>WheelRF</bodyName>
-			<frameName>BogieRF</frameName>
-			<topicName>WRF_RotationRate</topicName>
 			<updateRate>20</updateRate>
+			<WheelRF>WheelRF</WheelRF>
+			<WheelRF_RefLink>BogieRF</WheelRF_RefLink>
+			<WheelLF>WheelLF</WheelLF>
+			<WheelLF_RefLink>BogieLF</WheelLF_RefLink>
+			<WheelRM>WheelRM</WheelRM>
+			<WheelRM_RefLink>RightViceRocket</WheelRM_RefLink>
+			<WheelLM>WheelLM</WheelLM>
+			<WheelLM_RefLink>LeftViceRocket</WheelLM_RefLink>
+			<WheelRR>WheelRR</WheelRR>
+			<WheelRR_RefLink>BogieRR</WheelRR_RefLink>
+			<WheelLR>WheelLR</WheelLR>
+			<WheelLR_RefLink>BogieLR</WheelLR_RefLink>
+			<Body>body</Body>
+			<SkidRateTopicName>SkidRate</SkidRateTopicName>
+			<WheelVelPoseTopicName>VelPose</WheelVelPoseTopicName>
+			<WheelPoseInBodyTopicName>WheelPoseInBody</WheelPoseInBodyTopicName>
 		</plugin>
 	</gazebo>
 </robot>

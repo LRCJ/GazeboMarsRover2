@@ -33,6 +33,7 @@
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <std_msgs/Float64MultiArray.h>
+#include <geometry_msgs/PoseArray.h>
 
 #include <ros/callback_queue.h>
 #include <ros/advertise_options.h>
@@ -80,61 +81,46 @@ namespace gazebo
         double ComputeSkidRate(const std::string &LinkName,\
                                const std::string &RefLinkName,\
                                WheelIndex wi);
-        void P3DQueueThread();
+        void QueueThread();
 
 
         // ros variable
         ros::NodeHandle* rosnode_;
         PubQueue<std_msgs::Float64MultiArray>::Ptr PubSkidRateQue_;
         PubQueue<geometry_msgs::PoseStamped>::Ptr PubWheelVelPoseQue_[6];
+        PubQueue<geometry_msgs::PoseArray>::Ptr PubWheelPoseInBodyQue_;
         ros::Publisher SkidRatePub_;
         ros::Publisher WheelVelPosePub_[6];
+        ros::Publisher WheelPoseInBodyPub_;
         std::string SkidRateTopicName_;
-        std::string WheelVelPoseTopicName_[6];
+        std::string WheelVelPoseTopicName_;
+        std::string WheelPoseInBodyTopicName_;
 
         // gazebo variable
         physics::WorldPtr world_;
         physics::ModelPtr model_;
-        physics::LinkPtr link_;
-        physics::LinkPtr reference_link_;
-
 
         // data
         std_msgs::Float64MultiArray SkidRate_;
         double SkidRateBuf_[6];
+        geometry_msgs::PoseStamped WheelVelPose_;
+        geometry_msgs::PoseArray WheelPoseInBody_;
+
 
         //link name
-        physics::LinkPtr WheelLink[6];//车轮link
-        physics::LinkPtr WheelRotRateRefLink[6];//获取车轮转速的参考link
-        physics::LinkPtr GlobalRefLink;//车轮全局速度的参考link
+        std::string WheelName_[6];
+        std::string WheelRefLinkName_[6];
+        // std::string GlobalRefLinkName;
+        std::string BodyName_;
 
-        std::string WheelLinkName[6];
-        std::string WheelRotRateRefLinkName[6];
-        std::string GlobalRefLinkName;
-
-
-
-        nav_msgs::Odometry pose_msg_;
-        std::string link_name_;
-        std::string topic_name_;
-        std::string frame_name_;
-        std::string tf_frame_name_;
-        ignition::math::Pose3<double> offset_;
         boost::mutex lock;
         common::Time last_time_;
-        ignition::math::Vector3<double> last_vpos_;
-        ignition::math::Vector3<double> last_veul_;
-        ignition::math::Vector3<double> apos_;
-        ignition::math::Vector3<double> aeul_;
-        ignition::math::Vector3<double> last_frame_vpos_;
-        ignition::math::Vector3<double> last_frame_veul_;
-        ignition::math::Vector3<double> frame_apos_;
-        ignition::math::Vector3<double> frame_aeul_;
+
 
     // rate control
         double update_rate_;
         std::string robot_namespace_;
-        ros::CallbackQueue p3d_queue_;
+        ros::CallbackQueue ComputeSkidRate_queue_;
         boost::thread callback_queue_thread_;
 
     // Pointer to the update event connection

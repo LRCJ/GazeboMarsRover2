@@ -37,8 +37,8 @@ namespace gazebo
         event::Events::ConnectWorldUpdateEnd(boost::bind(&GazeboComputeSkidRate::UpdateChild, this));
         // Finalize the controller
         this->rosnode_->shutdown();
-        this->p3d_queue_.clear();
-        this->p3d_queue_.disable();
+        this->ComputeSkidRate_queue_.clear();
+        this->ComputeSkidRate_queue_.disable();
         this->callback_queue_thread_.join();
         delete this->rosnode_;
     }
@@ -55,54 +55,143 @@ namespace gazebo
         if (_sdf->HasElement("robotNamespace"))
             this->robot_namespace_ =
         _sdf->GetElement("robotNamespace")->Get<std::string>() + "/";
-
-        if (!_sdf->HasElement("bodyName"))
-        {
-            ROS_FATAL("p3d plugin missing <bodyName>, cannot proceed");
-            return;
-        }
-        else
-            this->link_name_ = _sdf->GetElement("bodyName")->Get<std::string>();
-
-        this->link_ = _parent->GetLink(this->link_name_);
-        if (!this->link_)
-        {
-            ROS_FATAL("gazebo_ros_p3d plugin error: bodyName: %s does not exist\n",
-            this->link_name_.c_str());
-            return;
-        }
-
-        if (!_sdf->HasElement("topicName"))
-        {
-            ROS_FATAL("p3d plugin missing <topicName>, cannot proceed");
-            return;
-        }
-        else
-            this->topic_name_ = _sdf->GetElement("topicName")->Get<std::string>();
-
-        if (!_sdf->HasElement("frameName"))
-        {
-            ROS_DEBUG("p3d plugin missing <frameName>, defaults to world");
-            this->frame_name_ = "world";
-        }
-        else
-            this->frame_name_ = _sdf->GetElement("frameName")->Get<std::string>();
-
-
         if (!_sdf->HasElement("updateRate"))
         {
-            ROS_DEBUG("p3d plugin missing <updateRate>, defaults to 0.0"
+            ROS_DEBUG("ComputeSkidRate plugin missing <updateRate>, defaults to 0.0"
         " (as fast as possible)");
             this->update_rate_ = 0;
         }
         else
             this->update_rate_ = _sdf->GetElement("updateRate")->Get<double>();
 
+        // get wheels name
+        if (!_sdf->HasElement("WheelRF"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelRF>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelName_[RF] = _sdf->GetElement("WheelRF")->Get<std::string>();
+        if (!_sdf->HasElement("WheelLF"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelLF>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelName_[LF] = _sdf->GetElement("WheelLF")->Get<std::string>();
+        if (!_sdf->HasElement("WheelRM"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelRM>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelName_[RM] = _sdf->GetElement("WheelRM")->Get<std::string>();
+        if (!_sdf->HasElement("WheelLM"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelLM>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelName_[LM] = _sdf->GetElement("WheelLM")->Get<std::string>();
+        if (!_sdf->HasElement("WheelRR"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelRR>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelName_[RR] = _sdf->GetElement("WheelRR")->Get<std::string>();
+        if (!_sdf->HasElement("WheelLR"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelLR>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelName_[LR] = _sdf->GetElement("WheelLR")->Get<std::string>();
+
+        // and ref link name
+        if (!_sdf->HasElement("WheelRF_RefLink"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelRF_RefLink>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelRefLinkName_[RF] = _sdf->GetElement("WheelRF_RefLink")->Get<std::string>();
+        if (!_sdf->HasElement("WheelLF_RefLink"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelLF_RefLink>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelRefLinkName_[LF] = _sdf->GetElement("WheelLF_RefLink")->Get<std::string>();
+        if (!_sdf->HasElement("WheelRM_RefLink"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelRM_RefLink>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelRefLinkName_[RM] = _sdf->GetElement("WheelRM_RefLink")->Get<std::string>();
+        if (!_sdf->HasElement("WheelLM_RefLink"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelLM_RefLink>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelRefLinkName_[LM] = _sdf->GetElement("WheelLM_RefLink")->Get<std::string>();
+        if (!_sdf->HasElement("WheelRR_RefLink"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelRR_RefLink>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelRefLinkName_[RR] = _sdf->GetElement("WheelRR_RefLink")->Get<std::string>();
+        if (!_sdf->HasElement("WheelLR_RefLink"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelLR_RefLink>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelRefLinkName_[LR] = _sdf->GetElement("WheelLR_RefLink")->Get<std::string>();
+        // get lidar name
+        if (!_sdf->HasElement("Body"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <Body>, cannot proceed");
+            return;
+        }
+        else
+            this->BodyName_ = _sdf->GetElement("Body")->Get<std::string>();
+
+
+
+
+        // get skid rate topic name
+        if (!_sdf->HasElement("SkidRateTopicName"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <SkidRateTopicName>, cannot proceed");
+            return;
+        }
+        else
+            this->SkidRateTopicName_ = _sdf->GetElement("SkidRateTopicName")->Get<std::string>();
+        if (!_sdf->HasElement("WheelVelPoseTopicName"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelVelPoseTopicName>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelVelPoseTopicName_ = _sdf->GetElement("WheelVelPoseTopicName")->Get<std::string>();
+        if (!_sdf->HasElement("WheelPoseInBodyTopicName"))
+        {
+            ROS_FATAL("ComputeSkidRate plugin missing <WheelPoseInBodyTopicName>, cannot proceed");
+            return;
+        }
+        else
+            this->WheelPoseInBodyTopicName_ = _sdf->GetElement("WheelPoseInBodyTopicName")->Get<std::string>();
+
+
         // Make sure the ROS node for Gazebo has already been initialized
         if (!ros::isInitialized())
         {
             ROS_FATAL_STREAM("A ROS node for Gazebo has not been initialized, unable to load plugin. "
-        << "Load the Gazebo system plugin 'libgazebo_ros_api_plugin.so' in the gazebo_ros package)");
+        << "Load the Gazebo system plugin 'ComputeSkidRate_plugins.so' in the gazebo_ros package)");
             return;
         }
 
@@ -111,41 +200,34 @@ namespace gazebo
         // publish multi queue
         this->pmq.startServiceThread();
 
-        // resolve tf prefix
-        std::string prefix;
-        this->rosnode_->getParam(std::string("tf_prefix"), prefix);
-        this->tf_frame_name_ = tf::resolve(prefix, this->frame_name_);
-
-        this->SkidRateTopicName_ = "/SkidRate";
-        this->WheelVelPoseTopicName_[RF] = "/WRF_VelPose";
-        this->WheelVelPoseTopicName_[LF] = "/WLF_VelPose";
-        this->WheelVelPoseTopicName_[RM] = "/WRM_VelPose";
-        this->WheelVelPoseTopicName_[LM] = "/WLM_VelPose";
-        this->WheelVelPoseTopicName_[RR] = "/WRR_VelPose";
-        this->WheelVelPoseTopicName_[LR] = "/WLR_VelPose";
-
+        // publish wheels skid rate
         this->PubSkidRateQue_ = this->pmq.addPub<std_msgs::Float64MultiArray>();
-        this->SkidRatePub_ = this->rosnode_->advertise<std_msgs::Float64MultiArray>(this->SkidRateTopicName_, 1);
-
+        this->SkidRatePub_ = this->rosnode_->advertise<std_msgs::Float64MultiArray>(this->SkidRateTopicName_, 10);
+        // and publish wheels velocity direction(pose)
         this->PubWheelVelPoseQue_[RF] = this->pmq.addPub<geometry_msgs::PoseStamped>();
-        this->WheelVelPosePub_[RF] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(this->WheelVelPoseTopicName_[RF], 1);
+        this->WheelVelPosePub_[RF] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(std::string("/WRF_")+this->WheelVelPoseTopicName_, 10);
         this->PubWheelVelPoseQue_[LF] = this->pmq.addPub<geometry_msgs::PoseStamped>();
-        this->WheelVelPosePub_[LF] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(this->WheelVelPoseTopicName_[LF], 1);
+        this->WheelVelPosePub_[LF] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(std::string("/WLF_")+this->WheelVelPoseTopicName_, 10);
         this->PubWheelVelPoseQue_[RM] = this->pmq.addPub<geometry_msgs::PoseStamped>();
-        this->WheelVelPosePub_[RM] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(this->WheelVelPoseTopicName_[RM], 1);
+        this->WheelVelPosePub_[RM] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(std::string("/WRM_")+this->WheelVelPoseTopicName_, 10);
         this->PubWheelVelPoseQue_[LM] = this->pmq.addPub<geometry_msgs::PoseStamped>();
-        this->WheelVelPosePub_[LM] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(this->WheelVelPoseTopicName_[LM], 1);
+        this->WheelVelPosePub_[LM] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(std::string("/WLM_")+this->WheelVelPoseTopicName_, 10);
         this->PubWheelVelPoseQue_[RR] = this->pmq.addPub<geometry_msgs::PoseStamped>();
-        this->WheelVelPosePub_[RR] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(this->WheelVelPoseTopicName_[RR], 1);
+        this->WheelVelPosePub_[RR] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(std::string("/WRR_")+this->WheelVelPoseTopicName_, 10);
         this->PubWheelVelPoseQue_[LR] = this->pmq.addPub<geometry_msgs::PoseStamped>();
-        this->WheelVelPosePub_[LR] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(this->WheelVelPoseTopicName_[LR], 1);
+        this->WheelVelPosePub_[LR] = this->rosnode_->advertise<geometry_msgs::PoseStamped>(std::string("/WLR_")+this->WheelVelPoseTopicName_, 10);
+        // publish wheels pose in LiDAR frame
+        this->PubWheelPoseInBodyQue_ = this->pmq.addPub<geometry_msgs::PoseArray>();
+        this->WheelPoseInBodyPub_ = this->rosnode_->advertise<geometry_msgs::PoseArray>(this->WheelPoseInBodyTopicName_,10);
 
-
+        // initialize variable
         SkidRate_.data.resize(6,0.0);
         memset(&SkidRateBuf_,0,sizeof(SkidRateBuf_));
+        WheelPoseInBody_.poses.resize(6);
+        WheelPoseInBody_.header.frame_id = this->BodyName_;
 
-        // start custom queue for p3d
-        this->callback_queue_thread_ = boost::thread(boost::bind(&GazeboComputeSkidRate::P3DQueueThread, this));
+        // start custom queue
+        this->callback_queue_thread_ = boost::thread(boost::bind(&GazeboComputeSkidRate::QueueThread, this));
 
         // New Mechanism for Updating every World Cycle
         // Listen to the update event. This event is broadcast every
@@ -257,30 +339,33 @@ double GazeboComputeSkidRate::ComputeSkidRate(const std::string &LinkName,\
         return 0;
 
     // publish link vel pose
-    geometry_msgs::PoseStamped WheelVelPose;
-    WheelVelPose.header.stamp = ros::Time::now();
-    WheelVelPose.header.frame_id = "world";
+    WheelVelPose_.header.stamp = ros::Time::now();
+    WheelVelPose_.header.frame_id = "world";
 
-    ignition::math::Vector3d vx(vel);
-    vx.Normalize();
-    ComputeRelativePose(LinkName,std::string("world"),pose);
-    ignition::math::Matrix3d m(pose.Rot());
-    ignition::math::Vector3d vy(m(0,1),m(1,1),m(2,1));
-    vy.Normalize();
-    ignition::math::Vector3d vz = vx.Cross(vy);
-    vz.Normalize();
-    m.Axes(vx,vy,vz);
-    ignition::math::Quaterniond q(m);
+    // publish six wheel velocity pose(direction)
+    if(vel.Length()>0.01)
+    {
+        ignition::math::Vector3d vx(vel);
+        vx.Normalize();
+        ComputeRelativePose(LinkName,std::string("world"),pose);
+        ignition::math::Matrix3d m(pose.Rot());
+        ignition::math::Vector3d vy(m(0,1),m(1,1),m(2,1));
+        vy.Normalize();
+        ignition::math::Vector3d vz = vx.Cross(vy);
+        vz.Normalize();
+        m.Axes(vx,vy,vz);
+        ignition::math::Quaterniond q(m);
 
-    WheelVelPose.pose.position.x = pose.Pos().X();
-    WheelVelPose.pose.position.y = pose.Pos().Y();
-    WheelVelPose.pose.position.z = pose.Pos().Z();
-    WheelVelPose.pose.orientation.x = q.X();
-    WheelVelPose.pose.orientation.y = q.Y();
-    WheelVelPose.pose.orientation.z = q.Z();
-    WheelVelPose.pose.orientation.w = q.W();
+        WheelVelPose_.pose.position.x = pose.Pos().X();
+        WheelVelPose_.pose.position.y = pose.Pos().Y();
+        WheelVelPose_.pose.position.z = pose.Pos().Z();
+        WheelVelPose_.pose.orientation.x = q.X();
+        WheelVelPose_.pose.orientation.y = q.Y();
+        WheelVelPose_.pose.orientation.z = q.Z();
+        WheelVelPose_.pose.orientation.w = q.W(); 
+    }
     
-    this->PubWheelVelPoseQue_[wi]->push(WheelVelPose,this->WheelVelPosePub_[wi]);
+    this->PubWheelVelPoseQue_[wi]->push(WheelVelPose_,this->WheelVelPosePub_[wi]);
 
     return SkidRate;
 }
@@ -288,9 +373,6 @@ double GazeboComputeSkidRate::ComputeSkidRate(const std::string &LinkName,\
 // Update the controller
 void GazeboComputeSkidRate::UpdateChild()
 {
-    if (!this->link_)
-        return;
-
     common::Time cur_time = this->world_->SimTime();
 
     // rate control
@@ -302,22 +384,42 @@ void GazeboComputeSkidRate::UpdateChild()
     {
         this->lock.lock();
 
-        SkidRateBuf_[RF] = ComputeSkidRate("WheelRF","BogieRF",RF);
+        // compute six wheel skid rate
+        SkidRateBuf_[RF] = ComputeSkidRate(this->WheelName_[RF],this->WheelRefLinkName_[RF],RF);
         abs(SkidRateBuf_[RF])<1.0e-6?:this->SkidRate_.data[RF] = SkidRateBuf_[RF];
-        SkidRateBuf_[LF] = ComputeSkidRate("WheelLF","BogieLF",LF);
+        SkidRateBuf_[LF] = ComputeSkidRate(this->WheelName_[LF],this->WheelRefLinkName_[LF],LF);
         abs(SkidRateBuf_[LF])<1.0e-6?:this->SkidRate_.data[LF] = SkidRateBuf_[LF];
-        SkidRateBuf_[RM] = ComputeSkidRate("WheelRM","RightViceRocket",RM);
+        SkidRateBuf_[RM] = ComputeSkidRate(this->WheelName_[RM],this->WheelRefLinkName_[RM],RM);
         abs(SkidRateBuf_[RM])<1.0e-6?:this->SkidRate_.data[RM] = SkidRateBuf_[RM];
-        SkidRateBuf_[LM] = ComputeSkidRate("WheelLM","LeftViceRocket",LM);
+        SkidRateBuf_[LM] = ComputeSkidRate(this->WheelName_[LM],this->WheelRefLinkName_[LM],LM);
         abs(SkidRateBuf_[LM])<1.0e-6?:this->SkidRate_.data[LM] = SkidRateBuf_[LM];
-        SkidRateBuf_[RR] = ComputeSkidRate("WheelRR","BogieRR",RR);
+        SkidRateBuf_[RR] = ComputeSkidRate(this->WheelName_[RR],this->WheelRefLinkName_[RR],RR);
         abs(SkidRateBuf_[RR])<1.0e-6?:this->SkidRate_.data[RR] = SkidRateBuf_[RR];
-        SkidRateBuf_[LR] = ComputeSkidRate("WheelLR","BogieLR",LR);
+        SkidRateBuf_[LR] = ComputeSkidRate(this->WheelName_[LR],this->WheelRefLinkName_[LR],LR);
         abs(SkidRateBuf_[LR])<1.0e-6?:this->SkidRate_.data[LR] = SkidRateBuf_[LR];
+
+        // publish the pose of six wheel in LiDAR(PandarQT) frame
+        geometry_msgs::Pose this_pose;
+        ignition::math::Pose3d that_pose;
+        WheelPoseInBody_.header.stamp = ros::Time(this->world_->SimTime().sec,this->world_->SimTime().nsec);
+        for(int i = 0;i < 6;i++)
+        {
+            ComputeRelativePose(this->WheelName_[i],this->BodyName_,that_pose);
+            this_pose.position.x = that_pose.Pos().X();
+            this_pose.position.y = that_pose.Pos().Y();
+            this_pose.position.z = that_pose.Pos().Z();
+            this_pose.orientation.w = that_pose.Rot().W();
+            this_pose.orientation.x = that_pose.Rot().X();
+            this_pose.orientation.y = that_pose.Rot().Y();
+            this_pose.orientation.z = that_pose.Rot().Z();
+            this->WheelPoseInBody_.poses[i] = this_pose;
+        }
+
 
         this->lock.unlock();
 
         this->PubSkidRateQue_->push(this->SkidRate_, this->SkidRatePub_);
+        this->PubWheelPoseInBodyQue_->push(this->WheelPoseInBody_, this->WheelPoseInBodyPub_);
 
         // save last time stamp
         this->last_time_ = cur_time;
@@ -325,13 +427,13 @@ void GazeboComputeSkidRate::UpdateChild()
 }
 
 // Put laser data to the interface
-void GazeboComputeSkidRate::P3DQueueThread()
+void GazeboComputeSkidRate::QueueThread()
 {
   static const double timeout = 0.01;
 
   while (this->rosnode_->ok())
   {
-    this->p3d_queue_.callAvailable(ros::WallDuration(timeout));
+    this->ComputeSkidRate_queue_.callAvailable(ros::WallDuration(timeout));
   }
 }
 }
