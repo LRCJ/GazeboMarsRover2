@@ -9,7 +9,7 @@
     <include>
       <uri>model://ground_plane</uri>
     </include>
-<!--     <model name='Obstacle'>
+    <model name='Obstacle'>
             <pose>0 0 0 0 0 0</pose>
             <static>true</static>
             <allow_auto_disable>1</allow_auto_disable>
@@ -34,7 +34,7 @@
                     <pose>0 0 0 0 0 0</pose>
                     <geometry>
                         <mesh>
-                            <uri>model://terrain/Obstacle_01.STL</uri>
+                            <uri>model://terrain/Obstacle_04.STL</uri>
                         </mesh>
                     </geometry>
                 </visual>
@@ -44,7 +44,7 @@
                     <pose>0 0 0 0 0 0</pose>
                     <geometry>
                         <mesh>
-                            <uri>model://terrain/Obstacle_01.STL</uri>
+                            <uri>model://terrain/Obstacle_04.STL</uri>
                         </mesh>
                     </geometry>
                     <surface>
@@ -72,7 +72,7 @@
                         </contact>
                     </surface>
                 </collision>
-            </link>
+            </link><!--
             <link name='Obstacle_02'>
                 <pose>1 5 0 0 0 -1.570796</pose>
                 <enable_wind>0</enable_wind>
@@ -251,10 +251,12 @@
                         </contact>
                     </surface>
                 </collision>
-            </link>
-        </model> -->
+            </link>-->
+        </model>
 
 
+
+<!--
     <model name='Obstacle_01'>
       <static>1</static>
       <link name='Obstacle_01'>
@@ -925,6 +927,7 @@
       </link>
       <pose frame=''>3.046460 4.625160 0 0 0 -2.314393</pose>
     </model>
+-->
 
 
   </world>

@@ -102,6 +102,8 @@ namespace gazebo
             
             std::string RFWheelJointName;
             std::string LFWheelJointName;
+            std::string RMWheelJointName;
+            std::string LMWheelJointName;
             std::string RRWheelJointName;
             std::string LRWheelJointName;
             std::string RFBogieJointName;
@@ -114,7 +116,7 @@ namespace gazebo
             double torque_;
             double wheel_base_;
 
-            physics::JointPtr joints[8];
+            physics::JointPtr joints[10];
 
             // ROS STUFF
             ros::NodeHandle* rosnode_;
@@ -145,9 +147,10 @@ namespace gazebo
             void cmdVelCallback(const geometry_msgs::Twist::ConstPtr& cmd_msg);
 
             double x_,rot_;
-            double wheel_speed_[4];
+            double wheel_speed_[6];
             double alpha_,beta_;
             //bool alive_;
+            bool isCMD;
 
             // Update Rate
             double update_rate_;

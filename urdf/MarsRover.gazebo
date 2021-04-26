@@ -171,6 +171,8 @@
 			<updateRate>100.0</updateRate>
 			<RFWheelJoint>c_BogieRF_WheelRF</RFWheelJoint>
 			<LFWheelJoint>c_BogieLF_WheelLF</LFWheelJoint>
+			<RMWheelJoint>c_RightViceRocket_WheelRM</RMWheelJoint>
+			<LMWheelJoint>c_LeftViceRocket_WheelLM</LMWheelJoint>
 			<RRWheelJoint>c_BogieRR_WheelRR</RRWheelJoint>
 			<LRWheelJoint>c_BogieLR_WheelLR</LRWheelJoint>
 			<RFBogieJoint>c_RightMainRocket_BogieRF</RFBogieJoint>
@@ -189,7 +191,7 @@
 			<broadcastTF>1</broadcastTF>
 			<LiDARtoBody_w>0.843</LiDARtoBody_w>
 			<LiDARtoBody_x>0.000</LiDARtoBody_x>
-			<LiDARtoBody_y>0.573</LiDARtoBody_y>
+			<LiDARtoBody_y>0.537</LiDARtoBody_y>
 			<LiDARtoBody_z>0.000</LiDARtoBody_z>
 			<LiDARtoBody_tx>0.716</LiDARtoBody_tx>
 			<LiDARtoBody_ty>0.000</LiDARtoBody_ty>

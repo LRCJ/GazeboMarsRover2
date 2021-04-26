@@ -45,12 +45,14 @@ namespace gazebo
     {
         WRF=0,
         WLF=1,
-        WRR=2,
-        WLR=3,
-        BRF = 4,
-        BLF = 5,
-        BRR = 6,
-        BLR = 7,
+        WRM=2,
+        WLM=3,
+        WRR=4,
+        WLR=5,
+        BRF = 6,
+        BLF = 7,
+        BRR = 8,
+        BLR = 9,
     };
 
     GazeboRosSkidSteerDrive::GazeboRosSkidSteerDrive()
@@ -58,6 +60,8 @@ namespace gazebo
         // Initialize velocity stuff
         wheel_speed_[WRF] = 0;
         wheel_speed_[WLF] = 0;
+        wheel_speed_[WRM] = 0;
+        wheel_speed_[WLM] = 0;
         wheel_speed_[WRR] = 0;
         wheel_speed_[WLR] = 0;
 
@@ -88,6 +92,7 @@ namespace gazebo
         tcsetattr(0,TCSANOW,&new_settings);
         while(true)
         {   int c = getchar();//阻塞式的
+            isCMD = false;
             ros::param::get("Speed",x__);
             ros::param::get("RotationAngle",rot__);
             switch(c)
@@ -154,6 +159,7 @@ namespace gazebo
             while(1)
             { 
                 len = xbox_map_read(xbox_fd, &map);//阻塞式的
+                isCMD = false;
                 if (len == -1)  
                 {
                     //ROS_INFO("read XBOX input failed!");
@@ -191,6 +197,22 @@ namespace gazebo
         xbox_close(xbox_fd);
     }
 
+    void GazeboRosSkidSteerDrive::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& cmd_msg)
+    {
+        boost::mutex::scoped_lock scoped_lock(lock);
+        isCMD = true;
+        // x_ = cmd_msg->linear.x;
+        // if(cmd_msg->angular.z>0)
+        //     alpha_ = cmd_msg->angular.z;
+        // else 
+        //     beta_ = cmd_msg->angular.z;
+        wheel_speed_[WRF] = cmd_msg->linear.x;
+        wheel_speed_[WLF] = -cmd_msg->linear.y;
+        wheel_speed_[WRM] = cmd_msg->linear.z;
+        wheel_speed_[WLM] = -cmd_msg->angular.x;
+        wheel_speed_[WRR] = cmd_msg->angular.y;
+        wheel_speed_[WLR] = -cmd_msg->angular.z;
+    }
 
     // Load the controller
     void GazeboRosSkidSteerDrive::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
@@ -239,6 +261,20 @@ namespace gazebo
                 this->robot_namespace_.c_str(), this->LFWheelJointName.c_str());
         else
             this->LFWheelJointName = _sdf->GetElement("LFWheelJoint")->Get<std::string>();
+        //right middle wheel
+        this->RMWheelJointName = "c_RightViceRocket_WheelRM";
+        if(!_sdf->HasElement("RMWheelJoint"))
+            ROS_WARN("MarsRoverDriver Plugin (ns = %s) missing <RMWheelJoint>, defaults to \"%s\"",
+                this->robot_namespace_.c_str(), this->LFWheelJointName.c_str());
+        else
+            this->RMWheelJointName = _sdf->GetElement("RMWheelJoint")->Get<std::string>();
+        //left middle wheel
+        this->LMWheelJointName = "c_LeftViceRocket_WheelLM";
+        if(!_sdf->HasElement("LMWheelJoint"))
+            ROS_WARN("MarsRoverDriver Plugin (ns = %s) missing <LMWheelJoint>, defaults to \"%s\"",
+                this->robot_namespace_.c_str(), this->LFWheelJointName.c_str());
+        else
+            this->LMWheelJointName = _sdf->GetElement("LMWheelJoint")->Get<std::string>();
         //right rear wheel
         this->RRWheelJointName = "c_BogieRR_WheelRR";
         if(!_sdf->HasElement("RRWheelJoint"))
@@ -414,6 +450,8 @@ namespace gazebo
         // get the joint ptr for setting position/velocity/force
         joints[WRF] = this->parent->GetJoint(RFWheelJointName);
         joints[WLF] = this->parent->GetJoint(LFWheelJointName);
+        joints[WRM] = this->parent->GetJoint(RMWheelJointName);
+        joints[WLM] = this->parent->GetJoint(LMWheelJointName);
         joints[WRR] = this->parent->GetJoint(RRWheelJointName);
         joints[WLR] = this->parent->GetJoint(LRWheelJointName);
         joints[BRF] = this->parent->GetJoint(this->RFBogieJointName);
@@ -523,15 +561,19 @@ namespace gazebo
             // Update robot in case new velocities have been requested
             getWheelVelocities();
             #if GAZEBO_MAJOR_VERSION > 2
-            joints[WLF]->SetParam("vel", 0, wheel_speed_[WLF] / (wheel_diameter_ / 2.0));
-            joints[WRF]->SetParam("vel", 0, wheel_speed_[WRF] / (wheel_diameter_ / 2.0));
-            joints[WLR]->SetParam("vel", 0, wheel_speed_[WLR] / (wheel_diameter_ / 2.0));
-            joints[WRR]->SetParam("vel", 0, wheel_speed_[WRR] / (wheel_diameter_ / 2.0));
+                joints[WRF]->SetParam("vel", 0, wheel_speed_[WRF] / (wheel_diameter_ / 2.0));
+                joints[WLF]->SetParam("vel", 0, wheel_speed_[WLF] / (wheel_diameter_ / 2.0));
+                joints[WRM]->SetParam("vel", 0, wheel_speed_[WRM] / (wheel_diameter_ / 2.0));
+                joints[WLM]->SetParam("vel", 0, wheel_speed_[WLM] / (wheel_diameter_ / 2.0));
+                joints[WRR]->SetParam("vel", 0, wheel_speed_[WRR] / (wheel_diameter_ / 2.0));
+                joints[WLR]->SetParam("vel", 0, wheel_speed_[WLR] / (wheel_diameter_ / 2.0));
             #else
-            joints[WLF]->SetVelocity(0, wheel_speed_[WLF] / (wheel_diameter_ / 2.0));
-            joints[WRF]->SetVelocity(0, wheel_speed_[WRF] / (wheel_diameter_ / 2.0));
-            joints[WLR]->SetVelocity(0, wheel_speed_[WLR] / (wheel_diameter_ / 2.0));
-            joints[WRR]->SetVelocity(0, wheel_speed_[WRR] / (wheel_diameter_ / 2.0));
+                joints[WRF]->SetVelocity(0, wheel_speed_[WRF] / (wheel_diameter_ / 2.0));
+                joints[WLF]->SetVelocity(0, wheel_speed_[WLF] / (wheel_diameter_ / 2.0));
+                joints[WRM]->SetVelocity(0, wheel_speed_[WRM] / (wheel_diameter_ / 2.0));
+                joints[WLM]->SetVelocity(0, wheel_speed_[WLM] / (wheel_diameter_ / 2.0));
+                joints[WRR]->SetVelocity(0, wheel_speed_[WRR] / (wheel_diameter_ / 2.0));
+                joints[WLR]->SetVelocity(0, wheel_speed_[WLR] / (wheel_diameter_ / 2.0));
             #endif
             
             // //仅前轮转向
@@ -580,10 +622,12 @@ namespace gazebo
 
             //右转，前后轮同时转向
             double w = x_/(wheel_base_/2.0/tan(alpha_)+wheel_separation_/2.0);
-            wheel_speed_[WRF]= w * ( wheel_base_/2.0/sin(alpha_) );
+            wheel_speed_[WRF] = w * ( wheel_base_/2.0/sin(alpha_) );
             wheel_speed_[WLF] = -w * ( wheel_base_/2.0/sin(beta_) );
+            wheel_speed_[WRM] = w * ( wheel_base_/2.0/tan(alpha_) );
+            wheel_speed_[WLM] = -w * ( wheel_base_/2.0/tan(alpha_)+wheel_separation_ );
             wheel_speed_[WRR] = wheel_speed_[WRF];
-            wheel_speed_[WLR]  = wheel_speed_[WLF];
+            wheel_speed_[WLR] = wheel_speed_[WLF];
 
         }
         else if(alpha_ < 0)
@@ -598,30 +642,29 @@ namespace gazebo
             //左转，前后轮同时转向
             double w = x_/(wheel_base_/2.0/tan(-beta_)+wheel_separation_/2.0);
             wheel_speed_[WRF] = w * ( wheel_base_/2.0/tan(-alpha_) );
-            wheel_speed_[WLF]  = -w * ( wheel_base_/2.0/tan(-beta_) );
-            wheel_speed_[WRR]= wheel_speed_[WRF];
+            wheel_speed_[WLF] = -w * ( wheel_base_/2.0/tan(-beta_) );
+            wheel_speed_[WRM] = w * ( wheel_base_/2.0/tan(-beta_)+wheel_separation_ );
+            wheel_speed_[WLM] = -w * ( wheel_base_/2.0/tan(-beta_) );
+            wheel_speed_[WRR] = wheel_speed_[WRF];
             wheel_speed_[WLR] = wheel_speed_[WLF];
         }
         else
         {
             //直行
-            wheel_speed_[WRR] = x_;
-            wheel_speed_[WLR]  = -x_;
-            wheel_speed_[WRF]= x_;
-            wheel_speed_[WLF] = -x_;
+            if(isCMD)
+            {
+                ;
+            }
+            else
+            {
+                wheel_speed_[WRR] = x_;
+                wheel_speed_[WLR]  = -x_;
+                wheel_speed_[WRF]= x_;
+                wheel_speed_[WLF] = -x_; 
+            }
         }
         
 
-    }
-
-    void GazeboRosSkidSteerDrive::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& cmd_msg)
-    {
-        boost::mutex::scoped_lock scoped_lock(lock);
-        x_ = cmd_msg->linear.x;
-        if(cmd_msg->angular.z>0)
-            alpha_ = cmd_msg->angular.z;
-        else 
-            beta_ = cmd_msg->angular.z;
     }
 
     void GazeboRosSkidSteerDrive::publishOdometry(double step_time)

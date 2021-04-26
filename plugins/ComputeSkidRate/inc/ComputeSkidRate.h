@@ -80,7 +80,8 @@ namespace gazebo
                                  ignition::math::Pose3d &Pose);
         double ComputeSkidRate(const std::string &LinkName,\
                                const std::string &RefLinkName,\
-                               WheelIndex wi);
+                               WheelIndex wi,\
+                               double &rr);
         void QueueThread();
 
 

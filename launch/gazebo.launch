@@ -27,7 +27,7 @@
   <!--**set the parameters in ros paremeter server**-->
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mars_rover_2)/urdf/MarsRover.xacro" />
   <!--rosparam file="$(find mars_rover)/config/ROS_Control.yaml" command="load" /-->
-  <param name="Speed" type="double" value="0.3" />
+  <param name="Speed" type="double" value="0.5" />
   <param name="RotationAngle" type="double" value="0.785398163" />
 
   <!--**set use_sim_time flag**-->
@@ -62,13 +62,13 @@
   </group>
   
   <!--**spawn a model in mars terrain**-->
-   <node pkg="gazebo_ros" type="spawn_model" name="urdf_spawner" args="-x -1 -y 4 -z 0.9 -R 0 -Y 0 -urdf -param robot_description -model MarsRover" respawn="false" output="$(arg GazeboInfo)" />
+   <node pkg="gazebo_ros" type="spawn_model" name="urdf_spawner" args="-x -1 -y 4 -z 0.9 -R 0 -Y 2.8 -urdf -param robot_description -model MarsRover" respawn="false" output="$(arg GazeboInfo)" />
 
   <!--**This package allows you to publish the state of a robot to tf2 by topic joint_state**-->
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
     <param name="publish_frequency" type="double" value="30.0" />
   </node>
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mars_rover_2)/rviz/rviz.rviz" />
+  <!--node name="rviz" pkg="rviz" type="rviz" args="-d $(find mars_rover_2)/rviz/rviz.rviz" /-->
 
 </launch>

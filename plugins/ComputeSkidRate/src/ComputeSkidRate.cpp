@@ -221,7 +221,7 @@ namespace gazebo
         this->WheelPoseInBodyPub_ = this->rosnode_->advertise<geometry_msgs::PoseArray>(this->WheelPoseInBodyTopicName_,10);
 
         // initialize variable
-        SkidRate_.data.resize(6,0.0);
+        SkidRate_.data.resize(12,0.0);
         memset(&SkidRateBuf_,0,sizeof(SkidRateBuf_));
         WheelPoseInBody_.poses.resize(6);
         WheelPoseInBody_.header.frame_id = this->BodyName_;
@@ -321,13 +321,14 @@ void GazeboComputeSkidRate::ComputeRelativePose(const std::string &LinkName,\
 
 double GazeboComputeSkidRate::ComputeSkidRate(const std::string &LinkName,\
                                               const std::string &RefLinkName,\
-                                              WheelIndex wi)
+                                              WheelIndex wi,\
+                                              double &rr)
 {
     ignition::math::Pose3d pose;
     ignition::math::Vector3d vel,angular;
     // compute Wheel Rotation Rate
     ComputeRelativeVel(LinkName,RefLinkName,vel,angular);
-    double rr = angular.Y();
+    rr = angular.Y();
     // compute Wheel Velocity in world coordinate
     ComputeRelativeVel(LinkName,std::string("world"),vel,angular);
     double vel_mag = std::sqrt(vel.X()*vel.X()+vel.Y()*vel.Y()+vel.Z()*vel.Z());
@@ -384,19 +385,26 @@ void GazeboComputeSkidRate::UpdateChild()
     {
         this->lock.lock();
 
+        double rr;//wheel rotation rate
         // compute six wheel skid rate
-        SkidRateBuf_[RF] = ComputeSkidRate(this->WheelName_[RF],this->WheelRefLinkName_[RF],RF);
+        SkidRateBuf_[RF] = ComputeSkidRate(this->WheelName_[RF],this->WheelRefLinkName_[RF],RF,rr);
         abs(SkidRateBuf_[RF])<1.0e-6?:this->SkidRate_.data[RF] = SkidRateBuf_[RF];
-        SkidRateBuf_[LF] = ComputeSkidRate(this->WheelName_[LF],this->WheelRefLinkName_[LF],LF);
+        this->SkidRate_.data[RF+6] = rr;
+        SkidRateBuf_[LF] = ComputeSkidRate(this->WheelName_[LF],this->WheelRefLinkName_[LF],LF,rr);
         abs(SkidRateBuf_[LF])<1.0e-6?:this->SkidRate_.data[LF] = SkidRateBuf_[LF];
-        SkidRateBuf_[RM] = ComputeSkidRate(this->WheelName_[RM],this->WheelRefLinkName_[RM],RM);
+        this->SkidRate_.data[LF+6] = rr;
+        SkidRateBuf_[RM] = ComputeSkidRate(this->WheelName_[RM],this->WheelRefLinkName_[RM],RM,rr);
         abs(SkidRateBuf_[RM])<1.0e-6?:this->SkidRate_.data[RM] = SkidRateBuf_[RM];
-        SkidRateBuf_[LM] = ComputeSkidRate(this->WheelName_[LM],this->WheelRefLinkName_[LM],LM);
+        this->SkidRate_.data[RM+6] = rr;
+        SkidRateBuf_[LM] = ComputeSkidRate(this->WheelName_[LM],this->WheelRefLinkName_[LM],LM,rr);
         abs(SkidRateBuf_[LM])<1.0e-6?:this->SkidRate_.data[LM] = SkidRateBuf_[LM];
-        SkidRateBuf_[RR] = ComputeSkidRate(this->WheelName_[RR],this->WheelRefLinkName_[RR],RR);
+        this->SkidRate_.data[LM+6] = rr;
+        SkidRateBuf_[RR] = ComputeSkidRate(this->WheelName_[RR],this->WheelRefLinkName_[RR],RR,rr);
         abs(SkidRateBuf_[RR])<1.0e-6?:this->SkidRate_.data[RR] = SkidRateBuf_[RR];
-        SkidRateBuf_[LR] = ComputeSkidRate(this->WheelName_[LR],this->WheelRefLinkName_[LR],LR);
+        this->SkidRate_.data[RR+6] = rr;
+        SkidRateBuf_[LR] = ComputeSkidRate(this->WheelName_[LR],this->WheelRefLinkName_[LR],LR,rr);
         abs(SkidRateBuf_[LR])<1.0e-6?:this->SkidRate_.data[LR] = SkidRateBuf_[LR];
+        this->SkidRate_.data[LR+6] = rr;
 
         // publish the pose of six wheel in LiDAR(PandarQT) frame
         geometry_msgs::Pose this_pose;
