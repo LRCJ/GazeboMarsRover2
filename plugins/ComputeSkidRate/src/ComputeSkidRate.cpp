@@ -43,7 +43,7 @@ namespace gazebo
         delete this->rosnode_;
     }
 
-// Load the controller
+    // Load the controller
     void GazeboComputeSkidRate::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
     {
         // Get the world name.
@@ -221,7 +221,7 @@ namespace gazebo
         this->WheelPoseInBodyPub_ = this->rosnode_->advertise<geometry_msgs::PoseArray>(this->WheelPoseInBodyTopicName_,10);
 
         // initialize variable
-        SkidRate_.data.resize(12,0.0);
+        SkidRate_.data.resize(19,0.0);
         memset(&SkidRateBuf_,0,sizeof(SkidRateBuf_));
         WheelPoseInBody_.poses.resize(6);
         WheelPoseInBody_.header.frame_id = this->BodyName_;
@@ -235,213 +235,224 @@ namespace gazebo
         this->update_connection_ = event::Events::ConnectWorldUpdateBegin(boost::bind(&GazeboComputeSkidRate::UpdateChild, this));
     }
 
-void GazeboComputeSkidRate::ComputeRelativeVel(const std::string &LinkName,\
-                                               const std::string &RefLinkName,\
-                                               ignition::math::Vector3d &LinkVelocity,\
-                                               ignition::math::Vector3d &LinkAngular)
-{
-    // get links
-    gazebo::physics::LinkPtr Link;
-    gazebo::physics::LinkPtr RefLink;
-    Link = this->model_->GetLink(LinkName);
-    if(!Link)
-    {
-        ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", LinkName.c_str());
-        return;  
-    }
-
-    // get the relative vel between Link & GlobalLink(world)
-    LinkVelocity = Link->WorldLinearVel();
-    LinkAngular = Link->WorldAngularVel();
-
-    // if ref link is world, do not transform coordinate
-    if(RefLinkName != "/world" &&
-       RefLinkName != "world" &&
-       RefLinkName != "/map" &&
-       RefLinkName != "map")
-    {
-        RefLink = this->model_->GetLink(RefLinkName);
-        if(!RefLink)
-        {
-            ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", RefLinkName.c_str());
-            return;  
-        }
-        // get the relative vel between RefLink & GlobalLink(world)
-        auto RefLinkVelocity = RefLink->WorldLinearVel();
-        auto RefLinkAngular = RefLink->WorldAngularVel();
-        auto RefLinkPose = RefLink->WorldPose();
-        // compute the relative pose & vel between Link & RefLink
-        // convert to relative vel
-        // source code is wrong, It should use RotateVectorReverse instead of RotateVector.
-        LinkVelocity = RefLinkPose.Rot().RotateVectorReverse(LinkVelocity - RefLinkVelocity);
-        LinkAngular = RefLinkPose.Rot().RotateVectorReverse(LinkAngular - RefLinkAngular);
-    }
-}
-
-void GazeboComputeSkidRate::ComputeRelativePose(const std::string &LinkName,\
+    void GazeboComputeSkidRate::ComputeRelativeVel(const std::string &LinkName,\
                                                 const std::string &RefLinkName,\
-                                                ignition::math::Pose3d &LinkPose)
-{
-    // get links
-    gazebo::physics::LinkPtr Link;
-    gazebo::physics::LinkPtr RefLink;
-    Link = this->model_->GetLink(LinkName);
-    if(!Link)
+                                                ignition::math::Vector3d &LinkVelocity,\
+                                                ignition::math::Vector3d &LinkAngular)
     {
-        ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", LinkName.c_str());
-        return;  
-    }
-
-
-    // get the relative pose between Link & GlobalLink(world)
-    LinkPose = Link->WorldPose();
-
-    // if ref link is world, do not transform coordinate
-    if(RefLinkName != "/world" &&
-       RefLinkName != "world" &&
-       RefLinkName != "/map" &&
-       RefLinkName != "map")
-    {
-        RefLink = this->model_->GetLink(RefLinkName);
-        if(!RefLink)
+        // get links
+        gazebo::physics::LinkPtr Link;
+        gazebo::physics::LinkPtr RefLink;
+        Link = this->model_->GetLink(LinkName);
+        if(!Link)
         {
-            ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", RefLinkName.c_str());
+            ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", LinkName.c_str());
             return;  
         }
-        // get the relative pose between RefLink & GlobalLink(world)
-        auto RefLinkPose = RefLink->WorldPose();
 
-        // compute the relative pose between Link & RefLink
-        // convert to relative pose
-        LinkPose.Pos() = LinkPose.Pos() - RefLinkPose.Pos();
-        LinkPose.Pos() = RefLinkPose.Rot().RotateVectorReverse(LinkPose.Pos());
-        LinkPose.Rot() *= RefLinkPose.Rot().Inverse();
-    }
-}
+        // get the relative vel between Link & GlobalLink(world)
+        LinkVelocity = Link->WorldLinearVel();
+        LinkAngular = Link->WorldAngularVel();
 
-double GazeboComputeSkidRate::ComputeSkidRate(const std::string &LinkName,\
-                                              const std::string &RefLinkName,\
-                                              WheelIndex wi,\
-                                              double &rr)
-{
-    ignition::math::Pose3d pose;
-    ignition::math::Vector3d vel,angular;
-    // compute Wheel Rotation Rate
-    ComputeRelativeVel(LinkName,RefLinkName,vel,angular);
-    rr = angular.Y();
-    // compute Wheel Velocity in world coordinate
-    ComputeRelativeVel(LinkName,std::string("world"),vel,angular);
-    double vel_mag = std::sqrt(vel.X()*vel.X()+vel.Y()*vel.Y()+vel.Z()*vel.Z());
-    if( abs(vel_mag)<1.0e-6 || abs(rr)<1.0e-6 )
-        return 0;
-    //double SkidRate = (rr*0.15-vel_mag)/(rr*0.15);
-    double SkidRate = (vel_mag)/(rr*0.15);
-    if(SkidRate>2 || SkidRate<-2)
-        return 0;
-
-    // publish link vel pose
-    WheelVelPose_.header.stamp = ros::Time::now();
-    WheelVelPose_.header.frame_id = "world";
-
-    // publish six wheel velocity pose(direction)
-    if(vel.Length()>0.01)
-    {
-        ignition::math::Vector3d vx(vel);
-        vx.Normalize();
-        ComputeRelativePose(LinkName,std::string("world"),pose);
-        ignition::math::Matrix3d m(pose.Rot());
-        ignition::math::Vector3d vy(m(0,1),m(1,1),m(2,1));
-        vy.Normalize();
-        ignition::math::Vector3d vz = vx.Cross(vy);
-        vz.Normalize();
-        m.Axes(vx,vy,vz);
-        ignition::math::Quaterniond q(m);
-
-        WheelVelPose_.pose.position.x = pose.Pos().X();
-        WheelVelPose_.pose.position.y = pose.Pos().Y();
-        WheelVelPose_.pose.position.z = pose.Pos().Z();
-        WheelVelPose_.pose.orientation.x = q.X();
-        WheelVelPose_.pose.orientation.y = q.Y();
-        WheelVelPose_.pose.orientation.z = q.Z();
-        WheelVelPose_.pose.orientation.w = q.W(); 
-    }
-    
-    this->PubWheelVelPoseQue_[wi]->push(WheelVelPose_,this->WheelVelPosePub_[wi]);
-
-    return SkidRate;
-}
-
-// Update the controller
-void GazeboComputeSkidRate::UpdateChild()
-{
-    common::Time cur_time = this->world_->SimTime();
-
-    // rate control
-    if ( this->update_rate_ > 0 && (cur_time-this->last_time_).Double() < (1.0/this->update_rate_) )
-        return;
-    // differentiate to get accelerations
-    double tmp_dt = cur_time.Double() - this->last_time_.Double();
-    if (tmp_dt != 0)
-    {
-        this->lock.lock();
-
-        double rr;//wheel rotation rate
-        // compute six wheel skid rate
-        SkidRateBuf_[RF] = ComputeSkidRate(this->WheelName_[RF],this->WheelRefLinkName_[RF],RF,rr);
-        abs(SkidRateBuf_[RF])<1.0e-6?:this->SkidRate_.data[RF] = SkidRateBuf_[RF];
-        this->SkidRate_.data[RF+6] = rr;
-        SkidRateBuf_[LF] = ComputeSkidRate(this->WheelName_[LF],this->WheelRefLinkName_[LF],LF,rr);
-        abs(SkidRateBuf_[LF])<1.0e-6?:this->SkidRate_.data[LF] = SkidRateBuf_[LF];
-        this->SkidRate_.data[LF+6] = rr;
-        SkidRateBuf_[RM] = ComputeSkidRate(this->WheelName_[RM],this->WheelRefLinkName_[RM],RM,rr);
-        abs(SkidRateBuf_[RM])<1.0e-6?:this->SkidRate_.data[RM] = SkidRateBuf_[RM];
-        this->SkidRate_.data[RM+6] = rr;
-        SkidRateBuf_[LM] = ComputeSkidRate(this->WheelName_[LM],this->WheelRefLinkName_[LM],LM,rr);
-        abs(SkidRateBuf_[LM])<1.0e-6?:this->SkidRate_.data[LM] = SkidRateBuf_[LM];
-        this->SkidRate_.data[LM+6] = rr;
-        SkidRateBuf_[RR] = ComputeSkidRate(this->WheelName_[RR],this->WheelRefLinkName_[RR],RR,rr);
-        abs(SkidRateBuf_[RR])<1.0e-6?:this->SkidRate_.data[RR] = SkidRateBuf_[RR];
-        this->SkidRate_.data[RR+6] = rr;
-        SkidRateBuf_[LR] = ComputeSkidRate(this->WheelName_[LR],this->WheelRefLinkName_[LR],LR,rr);
-        abs(SkidRateBuf_[LR])<1.0e-6?:this->SkidRate_.data[LR] = SkidRateBuf_[LR];
-        this->SkidRate_.data[LR+6] = rr;
-
-        // publish the pose of six wheel in LiDAR(PandarQT) frame
-        geometry_msgs::Pose this_pose;
-        ignition::math::Pose3d that_pose;
-        WheelPoseInBody_.header.stamp = ros::Time(this->world_->SimTime().sec,this->world_->SimTime().nsec);
-        for(int i = 0;i < 6;i++)
+        // if ref link is world, do not transform coordinate
+        if(RefLinkName != "/world" &&
+        RefLinkName != "world" &&
+        RefLinkName != "/map" &&
+        RefLinkName != "map")
         {
-            ComputeRelativePose(this->WheelName_[i],this->BodyName_,that_pose);
-            this_pose.position.x = that_pose.Pos().X();
-            this_pose.position.y = that_pose.Pos().Y();
-            this_pose.position.z = that_pose.Pos().Z();
-            this_pose.orientation.w = that_pose.Rot().W();
-            this_pose.orientation.x = that_pose.Rot().X();
-            this_pose.orientation.y = that_pose.Rot().Y();
-            this_pose.orientation.z = that_pose.Rot().Z();
-            this->WheelPoseInBody_.poses[i] = this_pose;
+            RefLink = this->model_->GetLink(RefLinkName);
+            if(!RefLink)
+            {
+                ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", RefLinkName.c_str());
+                return;  
+            }
+            // get the relative vel between RefLink & GlobalLink(world)
+            auto RefLinkVelocity = RefLink->WorldLinearVel();
+            auto RefLinkAngular = RefLink->WorldAngularVel();
+            auto RefLinkPose = RefLink->WorldPose();
+            // compute the relative pose & vel between Link & RefLink
+            // convert to relative vel
+            // source code is wrong, It should use RotateVectorReverse instead of RotateVector.
+            LinkVelocity = RefLinkPose.Rot().RotateVectorReverse(LinkVelocity - RefLinkVelocity);
+            LinkAngular = RefLinkPose.Rot().RotateVectorReverse(LinkAngular - RefLinkAngular);
+        }
+    }
+
+    void GazeboComputeSkidRate::ComputeRelativePose(const std::string &LinkName,\
+                                                    const std::string &RefLinkName,\
+                                                    ignition::math::Pose3d &LinkPose)
+    {
+        // get links
+        gazebo::physics::LinkPtr Link;
+        gazebo::physics::LinkPtr RefLink;
+        Link = this->model_->GetLink(LinkName);
+        if(!Link)
+        {
+            ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", LinkName.c_str());
+            return;  
         }
 
 
-        this->lock.unlock();
+        // get the relative pose between Link & GlobalLink(world)
+        LinkPose = Link->WorldPose();
 
-        this->PubSkidRateQue_->push(this->SkidRate_, this->SkidRatePub_);
-        this->PubWheelPoseInBodyQue_->push(this->WheelPoseInBody_, this->WheelPoseInBodyPub_);
+        // if ref link is world, do not transform coordinate
+        if(RefLinkName != "/world" &&
+        RefLinkName != "world" &&
+        RefLinkName != "/map" &&
+        RefLinkName != "map")
+        {
+            RefLink = this->model_->GetLink(RefLinkName);
+            if(!RefLink)
+            {
+                ROS_ERROR("ComputeSkidRate plugin: '%s' link doesn't exist!\n", RefLinkName.c_str());
+                return;  
+            }
+            // get the relative pose between RefLink & GlobalLink(world)
+            auto RefLinkPose = RefLink->WorldPose();
 
-        // save last time stamp
-        this->last_time_ = cur_time;
+            // compute the relative pose between Link & RefLink
+            // convert to relative pose
+            LinkPose.Pos() = LinkPose.Pos() - RefLinkPose.Pos();
+            LinkPose.Pos() = RefLinkPose.Rot().RotateVectorReverse(LinkPose.Pos());
+            //LinkPose.Rot() *= RefLinkPose.Rot().Inverse();//error???
+            LinkPose.Rot() = RefLinkPose.Rot().Inverse()*LinkPose.Rot();
+        }
     }
-}
 
-// Put laser data to the interface
-void GazeboComputeSkidRate::QueueThread()
-{
-  static const double timeout = 0.01;
+    double GazeboComputeSkidRate::ComputeSkidRate(const std::string &LinkName,\
+                                                const std::string &RefLinkName,\
+                                                WheelIndex wi,\
+                                                double &rr,
+                                                double &vel_mag)
+    {
+        ignition::math::Pose3d pose;
+        ignition::math::Vector3d vel,angular;
+        // compute Wheel Rotation Rate
+        ComputeRelativeVel(LinkName,RefLinkName,vel,angular);
+        rr = angular.Y();
+        // compute Wheel Velocity in world coordinate
+        ComputeRelativeVel(LinkName,std::string("world"),vel,angular);
+        vel_mag = std::sqrt(vel.X()*vel.X()+vel.Y()*vel.Y()+vel.Z()*vel.Z());
+        if( abs(vel_mag)<1.0e-6 || abs(rr)<1.0e-6 )
+            return 0;
+        //double SkidRate = (rr*0.15-vel_mag)/(rr*0.15);
+        double SkidRate = (vel_mag)/(rr*0.15);
+        if(SkidRate>2 || SkidRate<-2)
+            return 0;
 
-  while (this->rosnode_->ok())
-  {
-    this->ComputeSkidRate_queue_.callAvailable(ros::WallDuration(timeout));
-  }
-}
+        // publish link vel pose
+        WheelVelPose_.header.stamp = ros::Time::now();
+        WheelVelPose_.header.frame_id = "world";
+
+        // publish six wheel velocity pose(direction)
+        if(vel.Length()>0.01)
+        {
+            ignition::math::Vector3d vx(vel);
+            vx.Normalize();
+            ComputeRelativePose(LinkName,std::string("world"),pose);
+            ignition::math::Matrix3d m(pose.Rot());
+            ignition::math::Vector3d vy(m(0,1),m(1,1),m(2,1));
+            vy.Normalize();
+            ignition::math::Vector3d vz = vx.Cross(vy);
+            vz.Normalize();
+            m.Axes(vx,vy,vz);
+            ignition::math::Quaterniond q(m);
+
+            WheelVelPose_.pose.position.x = pose.Pos().X();
+            WheelVelPose_.pose.position.y = pose.Pos().Y();
+            WheelVelPose_.pose.position.z = pose.Pos().Z();
+            WheelVelPose_.pose.orientation.x = q.X();
+            WheelVelPose_.pose.orientation.y = q.Y();
+            WheelVelPose_.pose.orientation.z = q.Z();
+            WheelVelPose_.pose.orientation.w = q.W(); 
+        }
+        
+        this->PubWheelVelPoseQue_[wi]->push(WheelVelPose_,this->WheelVelPosePub_[wi]);
+
+        return SkidRate;
+    }
+
+    // Update the controller
+    void GazeboComputeSkidRate::UpdateChild()
+    {
+        common::Time cur_time = this->world_->SimTime();
+
+        // rate control
+        if ( this->update_rate_ > 0 && (cur_time-this->last_time_).Double() < (1.0/this->update_rate_) )
+            return;
+        // differentiate to get accelerations
+        double tmp_dt = cur_time.Double() - this->last_time_.Double();
+        if (tmp_dt != 0)
+        {
+            this->lock.lock();
+
+            double rr,vel;//wheel rotation rate & vel
+            // compute six wheel skid rate
+            SkidRateBuf_[RF] = ComputeSkidRate(this->WheelName_[RF],this->WheelRefLinkName_[RF],RF,rr,vel);
+            abs(SkidRateBuf_[RF])<1.0e-6?:this->SkidRate_.data[RF] = SkidRateBuf_[RF];
+            this->SkidRate_.data[RF+6] = rr;
+            this->SkidRate_.data[RF+12] = vel;
+            SkidRateBuf_[LF] = ComputeSkidRate(this->WheelName_[LF],this->WheelRefLinkName_[LF],LF,rr,vel);
+            abs(SkidRateBuf_[LF])<1.0e-6?:this->SkidRate_.data[LF] = SkidRateBuf_[LF];
+            this->SkidRate_.data[LF+6] = rr;
+            this->SkidRate_.data[LF+12] = vel;
+            SkidRateBuf_[RM] = ComputeSkidRate(this->WheelName_[RM],this->WheelRefLinkName_[RM],RM,rr,vel);
+            abs(SkidRateBuf_[RM])<1.0e-6?:this->SkidRate_.data[RM] = SkidRateBuf_[RM];
+            this->SkidRate_.data[RM+6] = rr;
+            this->SkidRate_.data[RM+12] = vel;
+            SkidRateBuf_[LM] = ComputeSkidRate(this->WheelName_[LM],this->WheelRefLinkName_[LM],LM,rr,vel);
+            abs(SkidRateBuf_[LM])<1.0e-6?:this->SkidRate_.data[LM] = SkidRateBuf_[LM];
+            this->SkidRate_.data[LM+6] = rr;
+            this->SkidRate_.data[LM+12] = vel;
+            SkidRateBuf_[RR] = ComputeSkidRate(this->WheelName_[RR],this->WheelRefLinkName_[RR],RR,rr,vel);
+            abs(SkidRateBuf_[RR])<1.0e-6?:this->SkidRate_.data[RR] = SkidRateBuf_[RR];
+            this->SkidRate_.data[RR+6] = rr;
+            this->SkidRate_.data[RR+12] = vel;
+            SkidRateBuf_[LR] = ComputeSkidRate(this->WheelName_[LR],this->WheelRefLinkName_[LR],LR,rr,vel);
+            abs(SkidRateBuf_[LR])<1.0e-6?:this->SkidRate_.data[LR] = SkidRateBuf_[LR];
+            this->SkidRate_.data[LR+6] = rr;
+            this->SkidRate_.data[LR+12] = vel;
+
+            common::Time temp = this->world_->SimTime();
+            this->SkidRate_.data[18] = ((temp + cur_time).sec + (temp + cur_time).nsec*1.0e-9)/2.0;
+
+            // publish the pose of six wheel in LiDAR(PandarQT) frame
+            geometry_msgs::Pose this_pose;
+            ignition::math::Pose3d that_pose;
+            WheelPoseInBody_.header.stamp = ros::Time(this->world_->SimTime().sec,this->world_->SimTime().nsec);
+            for(int i = 0;i < 6;i++)
+            {
+                ComputeRelativePose(this->WheelName_[i],this->BodyName_,that_pose);
+                this_pose.position.x = that_pose.Pos().X();
+                this_pose.position.y = that_pose.Pos().Y();
+                this_pose.position.z = that_pose.Pos().Z();
+                this_pose.orientation.w = that_pose.Rot().W();
+                this_pose.orientation.x = that_pose.Rot().X();
+                this_pose.orientation.y = that_pose.Rot().Y();
+                this_pose.orientation.z = that_pose.Rot().Z();
+                this->WheelPoseInBody_.poses[i] = this_pose;
+            }
+
+
+            this->lock.unlock();
+
+            this->PubSkidRateQue_->push(this->SkidRate_, this->SkidRatePub_);
+            this->PubWheelPoseInBodyQue_->push(this->WheelPoseInBody_, this->WheelPoseInBodyPub_);
+
+            // save last time stamp
+            this->last_time_ = cur_time;
+        }
+    }
+
+    // Put laser data to the interface
+    void GazeboComputeSkidRate::QueueThread()
+    {
+    static const double timeout = 0.01;
+
+    while (this->rosnode_->ok())
+    {
+        this->ComputeSkidRate_queue_.callAvailable(ros::WallDuration(timeout));
+    }
+    }
 }

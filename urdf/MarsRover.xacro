@@ -1130,45 +1130,4 @@
   <xacro:PandarQT link="${LidarName}" topic="${LidarDataTopicName}" hz="${LidarHz}" lasers="${LidarLasers}" samples="${LidarSamples}" visual="${LidarBeamVisual}"></xacro:PandarQT>
   <xacro:IMU link="${LidarName}" pitch="${0}" gaussianNoise="0.0"></xacro:IMU>
 
-<!--   <transmission name="trans_RightMainRocket_BogieRF">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="c_RightMainRocket_BogieRF">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="motor1">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-  <transmission name="trans_LeftMainRocket_BogieLF">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="c_LeftMainRocket_BogieLF">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="motor2">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-  <transmission name="trans_RightViceRocket_BogieRR">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="c_RightViceRocket_BogieRR">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="motor3">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-  <transmission name="trans_LeftViceRocket_BogieLR">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="c_LeftViceRocket_BogieLR">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="motor4">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission> -->
-
 </robot>

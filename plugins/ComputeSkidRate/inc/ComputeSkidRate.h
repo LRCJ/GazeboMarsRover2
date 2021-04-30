@@ -81,7 +81,8 @@ namespace gazebo
         double ComputeSkidRate(const std::string &LinkName,\
                                const std::string &RefLinkName,\
                                WheelIndex wi,\
-                               double &rr);
+                               double &rr,
+                               double &vel_mag);
         void QueueThread();
 
 
