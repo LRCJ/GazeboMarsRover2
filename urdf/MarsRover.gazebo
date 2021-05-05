@@ -1,46 +1,46 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
   <xacro:property name="mu" value="0.5" />
-	<gazebo reference="body">
+	<!-- <gazebo reference="body">
 		<material>Gazebo/Gold</material>
-	</gazebo>
-	<gazebo reference="LeftMainRocket">
+	</gazebo> -->
+	<!-- <gazebo reference="LeftMainRocket">
 		<material>Gazebo/Red</material>
-	</gazebo>
-	<gazebo reference="RightMainRocket">
+	</gazebo> -->
+	<!-- <gazebo reference="RightMainRocket">
 		<material>Gazebo/Red</material>
-	</gazebo>
-	<gazebo reference="LeftViceRocket">
+	</gazebo> -->
+	<!-- <gazebo reference="LeftViceRocket">
 		<material>Gazebo/Blue</material>
 	</gazebo>
 	<gazebo reference="RightViceRocket">
 		<material>Gazebo/Blue</material>
-	</gazebo>
+	</gazebo> -->
 	<gazebo reference="WheelLF">
-		<material>Gazebo/Grey</material>
+		<!-- <material>Gazebo/Grey</material> -->
 		<mu1>${mu}</mu1>
 	</gazebo>
 	<gazebo reference="WheelLM">
-		<material>Gazebo/Grey</material>
+		<!-- <material>Gazebo/Grey</material> -->
 		<mu1>${mu}</mu1>
 	</gazebo>
 	<gazebo reference="WheelLR">
-		<material>Gazebo/Grey</material>
+		<!-- <material>Gazebo/Grey</material> -->
 		<mu1>${mu}</mu1>
 	</gazebo>
 	<gazebo reference="WheelRF">
-		<material>Gazebo/Grey</material>
+		<!-- <material>Gazebo/Grey</material> -->
 		<mu1>${mu}</mu1>
 	</gazebo>
 	<gazebo reference="WheelRM">
-		<material>Gazebo/Grey</material>
+		<!-- <material>Gazebo/Grey</material> -->
 		<mu1>${mu}</mu1>
 	</gazebo>
 	<gazebo reference="WheelRR">
-		<material>Gazebo/Grey</material>
+		<!-- <material>Gazebo/Grey</material> -->
 		<mu1>${mu}</mu1>
 	</gazebo>
-	<gazebo reference="DiffBar">
+	<!-- <gazebo reference="DiffBar">
 		<material>Gazebo/Green</material>
 	</gazebo>
 	<gazebo reference="LiDARBodyCon">
@@ -48,7 +48,7 @@
 	</gazebo>
 	<gazebo reference="LiDARSupport">
 		<material>Gazebo/Grey</material>
-	</gazebo>
+	</gazebo> -->
 	<gazebo>
 		<!--LINKs-->
 	    <link name='LeftDiffBarLink'>
@@ -71,7 +71,7 @@
 	        <geometry>
 	          <mesh>
 	            <scale>1 1 1</scale>
-	            <uri>model://rover/LeftDiffBarLink.STL</uri>
+	            <uri>model://rover/LeftDiffBarLink.dae</uri>
 	          </mesh>
 	        </geometry>
 	      </collision>
@@ -80,7 +80,7 @@
 	        <geometry>
 	          <mesh>
 	            <scale>1 1 1</scale>
-	            <uri>model://rover/LeftDiffBarLink.STL</uri>
+	            <uri>model://rover/LeftDiffBarLink.dae</uri>
 	          </mesh>
 	        </geometry>
 	        <material>
@@ -110,7 +110,7 @@
 	        <geometry>
 	          <mesh>
 	            <scale>1 1 1</scale>
-	            <uri>model://rover/RightDiffBarLink.STL</uri>
+	            <uri>model://rover/RightDiffBarLink.dae</uri>
 	          </mesh>
 	        </geometry>
 	      </collision>  
@@ -119,7 +119,7 @@
 	        <geometry>
 	          <mesh>
 	            <scale>1 1 1</scale>
-	            <uri>model://rover/RightDiffBarLink.STL</uri>
+	            <uri>model://rover/RightDiffBarLink.dae</uri>
 	          </mesh>
 	        </geometry>
 	        <material>

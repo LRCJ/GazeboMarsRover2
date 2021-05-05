@@ -36,7 +36,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/Body.STL" />
+          filename="package://mars_rover_2/meshes/rover/Body.dae" />
       </geometry>
       <material
         name="">
@@ -49,7 +49,7 @@
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mars_rover_2/meshes/rover/Body.STL" />
+        <mesh filename="package://mars_rover_2/meshes/rover/Body.dae" />
       </geometry>
     </collision>
   </link>
@@ -77,7 +77,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/LiDARBodyCon.STL" />
+          filename="package://mars_rover_2/meshes/rover/LiDARBodyCon.dae" />
       </geometry>
       <material
         name="">
@@ -91,7 +91,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/LiDARBodyCon.STL" />
+          filename="package://mars_rover_2/meshes/rover/LiDARBodyCon.dae" />
       </geometry>
     </collision>
   </link>
@@ -130,7 +130,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/LiDARSupport.STL" />
+          filename="package://mars_rover_2/meshes/rover/LiDARSupport.dae" />
       </geometry>
       <material
         name="">
@@ -144,7 +144,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/LiDARSupport.STL" />
+          filename="package://mars_rover_2/meshes/rover/LiDARSupport.dae" />
       </geometry>
     </collision>
   </link>
@@ -188,7 +188,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/LiDAR.STL" />
+          filename="package://mars_rover_2/meshes/rover/LiDAR.dae" />
       </geometry>
       <material
         name="">
@@ -202,7 +202,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/LiDAR.STL" />
+          filename="package://mars_rover_2/meshes/rover/LiDAR.dae" />
       </geometry>
     </collision>
   </link>
@@ -242,7 +242,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/DiffBar.STL" />
+          filename="package://mars_rover_2/meshes/rover/DiffBar.dae" />
       </geometry>
       <material
         name="">
@@ -256,7 +256,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/DiffBar.STL" />
+          filename="package://mars_rover_2/meshes/rover/DiffBar.dae" />
       </geometry>
     </collision>
   </link>
@@ -297,7 +297,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/RightDiffBarLink.STL" />
+          filename="package://mars_rover_2/meshes/rover/RightDiffBarLink.dae" />
       </geometry>
       <material
         name="">
@@ -311,7 +311,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/RightDiffBarLink.STL" />
+          filename="package://mars_rover_2/meshes/rover/RightDiffBarLink.dae" />
       </geometry>
     </collision>
   </link>
@@ -350,7 +350,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/LeftDiffBarLink.STL" />
+          filename="package://mars_rover_2/meshes/rover/LeftDiffBarLink.dae" />
       </geometry>
       <material
         name="">
@@ -364,7 +364,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/LeftDiffBarLink.STL" />
+          filename="package://mars_rover_2/meshes/rover/LeftDiffBarLink.dae" />
       </geometry>
     </collision>
   </link>
@@ -405,7 +405,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/RightMainRocket.STL" />
+          filename="package://mars_rover_2/meshes/rover/RightMainRocket.dae" />
       </geometry>
       <material
         name="">
@@ -419,7 +419,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/RightMainRocket.STL" />
+          filename="package://mars_rover_2/meshes/rover/RightMainRocket.dae" />
       </geometry>
     </collision>
   </link>
@@ -458,7 +458,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/BogieRF.STL" />
+          filename="package://mars_rover_2/meshes/rover/BogieRF.dae" />
       </geometry>
       <material
         name="">
@@ -472,7 +472,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/BogieRF.STL" />
+          filename="package://mars_rover_2/meshes/rover/BogieRF.dae" />
       </geometry>
     </collision>
   </link>
@@ -511,7 +511,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/WheelRF.STL" />
+          filename="package://mars_rover_2/meshes/rover/WheelRF.dae" />
       </geometry>
       <material
         name="">
@@ -525,7 +525,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/WheelRF.STL" />
+          filename="package://mars_rover_2/meshes/rover/WheelRF.dae" />
       </geometry>
     </collision>
   </link>
@@ -564,7 +564,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/RightViceRocket.STL" />
+          filename="package://mars_rover_2/meshes/rover/RightViceRocket.dae" />
       </geometry>
       <material
         name="">
@@ -578,7 +578,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/RightViceRocket.STL" />
+          filename="package://mars_rover_2/meshes/rover/RightViceRocket.dae" />
       </geometry>
     </collision>
   </link>
@@ -617,7 +617,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/WheelRM.STL" />
+          filename="package://mars_rover_2/meshes/rover/WheelRM.dae" />
       </geometry>
       <material
         name="">
@@ -631,7 +631,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/WheelRM.STL" />
+          filename="package://mars_rover_2/meshes/rover/WheelRM.dae" />
       </geometry>
     </collision>
   </link>
@@ -670,7 +670,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/BogieRR.STL" />
+          filename="package://mars_rover_2/meshes/rover/BogieRR.dae" />
       </geometry>
       <material
         name="">
@@ -684,7 +684,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/BogieRR.STL" />
+          filename="package://mars_rover_2/meshes/rover/BogieRR.dae" />
       </geometry>
     </collision>
   </link>
@@ -723,7 +723,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/WheelRR.STL" />
+          filename="package://mars_rover_2/meshes/rover/WheelRR.dae" />
       </geometry>
       <material
         name="">
@@ -737,7 +737,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/WheelRR.STL" />
+          filename="package://mars_rover_2/meshes/rover/WheelRR.dae" />
       </geometry>
     </collision>
   </link>
@@ -776,7 +776,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/LeftMainRocket.STL" />
+          filename="package://mars_rover_2/meshes/rover/LeftMainRocket.dae" />
       </geometry>
       <material
         name="">
@@ -790,7 +790,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/LeftMainRocket.STL" />
+          filename="package://mars_rover_2/meshes/rover/LeftMainRocket.dae" />
       </geometry>
     </collision>
   </link>
@@ -829,7 +829,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/BogieLF.STL" />
+          filename="package://mars_rover_2/meshes/rover/BogieLF.dae" />
       </geometry>
       <material
         name="">
@@ -843,7 +843,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/BogieLF.STL" />
+          filename="package://mars_rover_2/meshes/rover/BogieLF.dae" />
       </geometry>
     </collision>
   </link>
@@ -882,7 +882,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/WheelLF.STL" />
+          filename="package://mars_rover_2/meshes/rover/WheelLF.dae" />
       </geometry>
       <material
         name="">
@@ -896,7 +896,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/WheelLF.STL" />
+          filename="package://mars_rover_2/meshes/rover/WheelLF.dae" />
       </geometry>
     </collision>
   </link>
@@ -935,7 +935,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/LeftViceRocket.STL" />
+          filename="package://mars_rover_2/meshes/rover/LeftViceRocket.dae" />
       </geometry>
       <material
         name="">
@@ -949,7 +949,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/LeftViceRocket.STL" />
+          filename="package://mars_rover_2/meshes/rover/LeftViceRocket.dae" />
       </geometry>
     </collision>
   </link>
@@ -988,7 +988,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/WheelLM.STL" />
+          filename="package://mars_rover_2/meshes/rover/WheelLM.dae" />
       </geometry>
       <material
         name="">
@@ -1002,7 +1002,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/WheelLM.STL" />
+          filename="package://mars_rover_2/meshes/rover/WheelLM.dae" />
       </geometry>
     </collision>
   </link>
@@ -1041,7 +1041,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/BogieLR.STL" />
+          filename="package://mars_rover_2/meshes/rover/BogieLR.dae" />
       </geometry>
       <material
         name="">
@@ -1055,7 +1055,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/BogieLR.STL" />
+          filename="package://mars_rover_2/meshes/rover/BogieLR.dae" />
       </geometry>
     </collision>
   </link>
@@ -1094,7 +1094,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/WheelLR.STL" />
+          filename="package://mars_rover_2/meshes/rover/WheelLR.dae" />
       </geometry>
       <material
         name="">
@@ -1108,7 +1108,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://mars_rover_2/meshes/rover/WheelLR.STL" />
+          filename="package://mars_rover_2/meshes/rover/WheelLR.dae" />
       </geometry>
     </collision>
   </link>
