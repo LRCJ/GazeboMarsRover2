@@ -10,7 +10,7 @@
   <arg name="debug" default="false" />
   <arg name="physics" default="ode"/>
   <arg name="verbose" default="true"/>
-  <!--arg name="world_name" default="$(find mars_rover_2)/urdf/MarsTerrain.world"/-->
+  <!-- <arg name="world_name" default="$(find mars_rover_2)/urdf/MarsTerrain.world"/> -->
   <arg name="world_name" default="$(find mars_rover_2)/urdf/empty.world"/>
   <arg name="use_clock_frequency" default="false"/>
   <arg name="pub_clock_frequency" default="100"/>
@@ -62,8 +62,8 @@
   </group>
   
   <!--**spawn a model in mars terrain**-->
-   <node pkg="gazebo_ros" type="spawn_model" name="urdf_spawner" args="-x -1 -y 4 -z 0.9 -R 0 -Y 2.8 -urdf -param robot_description -model MarsRover" respawn="false" output="$(arg GazeboInfo)" />
-   <!-- <node pkg="gazebo_ros" type="spawn_model" name="urdf_spawner" args="-x 2.5 -y 3.5 -z 0.9 -R 0 -P 0 -Y 0 -urdf -param robot_description -model MarsRover" respawn="false" output="$(arg GazeboInfo)" /> -->
+   <!-- <node pkg="gazebo_ros" type="spawn_model" name="urdf_spawner" args="-x -1 -y 4 -z 0.9 -R 0 -Y 2.8 -urdf -param robot_description -model MarsRover" respawn="false" output="$(arg GazeboInfo)" /> -->
+   <node pkg="gazebo_ros" type="spawn_model" name="urdf_spawner" args="-x 1 -y 4 -z 0.9 -R 0 -P 0 -Y 0 -urdf -param robot_description -model MarsRover" respawn="false" output="$(arg GazeboInfo)" />
 
   <!--**This package allows you to publish the state of a robot to tf2 by topic joint_state**-->
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">

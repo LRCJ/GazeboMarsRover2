@@ -9,926 +9,1181 @@
     <include>
       <uri>model://ground_plane</uri>
     </include>
-    <model name='Obstacle'>
-            <pose>0 0 0 0 0 0</pose>
-            <static>true</static>
-            <allow_auto_disable>1</allow_auto_disable>
-            <link name='Obstacle_01'>
-                <pose>1 3 0 0 0 -0.523599</pose>
-                <enable_wind>0</enable_wind>
-                <self_collide>0</self_collide>
-                <kinematic>0</kinematic>
-                <inertial>
-                    <pose>0 0 0 0 0 0</pose>
-                    <mass>1</mass>
-                    <inertia>
-                        <ixx>0.166667</ixx>
-                        <ixy>0</ixy>
-                        <ixz>0</ixz>
-                        <iyy>0.166667</iyy>
-                        <iyz>0</iyz>
-                        <izz>0.166667</izz>
-                    </inertia>
-                </inertial>
-                <visual name='visual'>
-                    <pose>0 0 0 0 0 0</pose>
-                    <geometry>
-                        <mesh>
-                            <uri>model://terrain/Obstacle_04.STL</uri>
-                        </mesh>
-                    </geometry>
-                </visual>
-                <collision name='collision'>
-                    <laser_retro>0</laser_retro>
-                    <max_contacts>100</max_contacts>
-                    <pose>0 0 0 0 0 0</pose>
-                    <geometry>
-                        <mesh>
-                            <uri>model://terrain/Obstacle_04.STL</uri>
-                        </mesh>
-                    </geometry>
-                    <surface>
-                        <bounce>
-                            <restitution_coefficient>0</restitution_coefficient>
-                            <threshold>1e+06</threshold>
-                        </bounce>
-                        <friction>
-                            <ode>
-                                <mu>0.5</mu>
-                            </ode>
-                        </friction>
-                        <contact>
-                            <collide_without_contact>0</collide_without_contact>
-                            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-                            <collide_bitmask>1</collide_bitmask>
-                            <ode>
-                                <soft_cfm>0.2</soft_cfm>
-                                <soft_erp>0.2</soft_erp>
-                                <kp>1e+8</kp>
-                                <kd>10</kd>
-                                <max_vel>100</max_vel>
-                                <min_depth>0.001</min_depth>
-                            </ode>
-                        </contact>
-                    </surface>
-                </collision>
-            </link><!--
-            <link name='Obstacle_02'>
-                <pose>1 5 0 0 0 -1.570796</pose>
-                <enable_wind>0</enable_wind>
-                <self_collide>0</self_collide>
-                <kinematic>0</kinematic>
-                <inertial>
-                    <pose>0 0 0 0 0 0</pose>
-                    <mass>1</mass>
-                    <inertia>
-                        <ixx>0.166667</ixx>
-                        <ixy>0</ixy>
-                        <ixz>0</ixz>
-                        <iyy>0.166667</iyy>
-                        <iyz>0</iyz>
-                        <izz>0.166667</izz>
-                    </inertia>
-                </inertial>
-                <visual name='visual'>
-                    <pose>0 0 0 0 0 0</pose>
-                    <geometry>
-                        <mesh>
-                            <uri>model://terrain/Obstacle_01.STL</uri>
-                        </mesh>
-                    </geometry>
-                </visual>
-                <collision name='collision'>
-                    <laser_retro>0</laser_retro>
-                    <max_contacts>100</max_contacts>
-                    <pose>0 0 0 0 0 0</pose>
-                    <geometry>
-                        <mesh>
-                            <uri>model://terrain/Obstacle_01.STL</uri>
-                        </mesh>
-                    </geometry>
-                    <surface>
-                        <bounce>
-                            <restitution_coefficient>0</restitution_coefficient>
-                            <threshold>1e+06</threshold>
-                        </bounce>
-                        <friction>
-                            <ode>
-                                <mu>0.5</mu>
-                            </ode>
-                        </friction>
-                        <contact>
-                            <collide_without_contact>0</collide_without_contact>
-                            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-                            <collide_bitmask>1</collide_bitmask>
-                            <ode>
-                                <soft_cfm>0.2</soft_cfm>
-                                <soft_erp>0.2</soft_erp>
-                                <kp>1e+8</kp>
-                                <kd>10</kd>
-                                <max_vel>100</max_vel>
-                                <min_depth>0.001</min_depth>
-                            </ode>
-                        </contact>
-                    </surface>
-                </collision>
-            </link>
-            <link name='Obstacle_03'>
-                <pose>2.5 3.0 0 0 0 1.047198</pose>
-                <self_collide>0</self_collide>
-                <kinematic>0</kinematic>
-                <inertial>
-                    <pose>0 0 0 0 0 0</pose>
-                    <mass>1</mass>
-                    <inertia>
-                        <ixx>0.166667</ixx>
-                        <ixy>0</ixy>
-                        <ixz>0</ixz>
-                        <iyy>0.166667</iyy>
-                        <iyz>0</iyz>
-                        <izz>0.166667</izz>
-                    </inertia>
-                </inertial>
-                <visual name='visual'>
-                    <pose>0 0 0 0 0 0</pose>
-                    <geometry>
-                        <mesh>
-                            <uri>model://terrain/Obstacle_01.STL</uri>
-                        </mesh>
-                    </geometry>
-                </visual>
-                <collision name='collision'>
-                    <laser_retro>0</laser_retro>
-                    <max_contacts>100</max_contacts>
-                    <pose>0 0 0 0 0 0</pose>
-                    <geometry>
-                        <mesh>
-                            <uri>model://terrain/Obstacle_01.STL</uri>
-                        </mesh>
-                    </geometry>
-                    <surface>
-                        <bounce>
-                            <restitution_coefficient>0</restitution_coefficient>
-                            <threshold>1e+06</threshold>
-                        </bounce>
-                        <friction>
-                            <ode>
-                                <mu>0.5</mu>
-                            </ode>
-                        </friction>
-                        <contact>
-                            <collide_without_contact>0</collide_without_contact>
-                            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-                            <collide_bitmask>1</collide_bitmask>
-                            <ode>
-                                <soft_cfm>0.2</soft_cfm>
-                                <soft_erp>0.2</soft_erp>
-                                <kp>1e+8</kp>
-                                <kd>10</kd>
-                                <max_vel>100</max_vel>
-                                <min_depth>0.001</min_depth>
-                            </ode>
-                        </contact>
-                    </surface>
-                </collision>
-            </link>
-            <link name='Obstacle_04'>
-                <pose>3.2 5.0 0 0 0 3.490659</pose>
-                <enable_wind>0</enable_wind>
-                <self_collide>0</self_collide>
-                <kinematic>0</kinematic>
-                <inertial>
-                    <pose>0 0 0 0 0 0</pose>
-                    <mass>1</mass>
-                    <inertia>
-                        <ixx>0.166667</ixx>
-                        <ixy>0</ixy>
-                        <ixz>0</ixz>
-                        <iyy>0.166667</iyy>
-                        <iyz>0</iyz>
-                        <izz>0.166667</izz>
-                    </inertia>
-                </inertial>
-                <visual name='visual'>
-                    <pose>0 0 0 0 0 0</pose>
-                    <geometry>
-                        <mesh>
-                            <uri>model://terrain/Obstacle_01.STL</uri>
-                        </mesh>
-                    </geometry>
-                </visual>
-                <collision name='collision'>
-                    <laser_retro>0</laser_retro>
-                    <max_contacts>100</max_contacts>
-                    <pose>0 0 0 0 0 0</pose>
-                    <geometry>
-                        <mesh>
-                            <uri>model://terrain/Obstacle_01.STL</uri>
-                        </mesh>
-                    </geometry>
-                    <surface>
-                        <bounce>
-                            <restitution_coefficient>0</restitution_coefficient>
-                            <threshold>1e+06</threshold>
-                        </bounce>
-                        <friction>
-                            <ode>
-                                <mu>0.5</mu>
-                            </ode>
-                        </friction>
-                        <contact>
-                            <collide_without_contact>0</collide_without_contact>
-                            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-                            <collide_bitmask>1</collide_bitmask>
-                            <ode>
-                                <soft_cfm>0.2</soft_cfm>
-                                <soft_erp>0.2</soft_erp>
-                                <kp>1e+8</kp>
-                                <kd>10</kd>
-                                <max_vel>100</max_vel>
-                                <min_depth>0.001</min_depth>
-                            </ode>
-                        </contact>
-                    </surface>
-                </collision>
-            </link>-->
-        </model>
+    <!-- scene -->
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+      <sky>
+        <clouds>
+          <speed>12</speed>
+        </clouds>
+      </sky>
+    </scene>
+    <!-- Obstacle -->
 
-
-
-<!--
-    <model name='Obstacle_01'>
-      <static>1</static>
-      <link name='Obstacle_01'>
+  <model name='Obstacle_01'>
+    <static>1</static>
+    <link name='Obstacle_01'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
         <pose frame=''>0 0 0 0 -0 0</pose>
-        <enable_wind>0</enable_wind>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <inertial>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <laser_retro>0</laser_retro>
-          <max_contacts>100</max_contacts>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-          <surface>
-            <bounce>
-              <restitution_coefficient>0</restitution_coefficient>
-              <threshold>1e+06</threshold>
-            </bounce>
-            <friction>
-              <ode>
-                <mu>0.5</mu>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <collide_without_contact>0</collide_without_contact>
-              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-              <collide_bitmask>1</collide_bitmask>
-              <ode>
-                <soft_cfm>0.2</soft_cfm>
-                <soft_erp>0.2</soft_erp>
-                <kp>1e+08</kp>
-                <kd>10</kd>
-                <max_vel>100</max_vel>
-                <min_depth>0.001</min_depth>
-              </ode>
-            </contact>
-          </surface>
-        </collision>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>1.04248 5.33233 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_02'>
+    <static>1</static>
+    <link name='Obstacle_02'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>2.45283 5.73276 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_03'>
+    <static>1</static>
+    <link name='Obstacle_03'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>3.63696 4.65244 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_04'>
+    <static>1</static>
+    <link name='Obstacle_04'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>4.32447 5.84752 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_05'>
+    <static>1</static>
+    <link name='Obstacle_05'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>5.41571 4.5027 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_06'>
+    <static>1</static>
+    <link name='Obstacle_06'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>5.8171 5.42956 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_07'>
+    <static>1</static>
+    <link name='Obstacle_07'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>0.166479 2.02646 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_08'>
+    <static>1</static>
+    <link name='Obstacle_08'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>1.6713 2.26521 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_09'>
+    <static>1</static>
+    <link name='Obstacle_09'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>3.50249 3.20439 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_10'>
+    <static>1</static>
+    <link name='Obstacle_10'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>3.95079 2.13571 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_11'>
+    <static>1</static>
+    <link name='Obstacle_11'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>5.50724 2.2695 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_12'>
+    <static>1</static>
+    <link name='Obstacle_12'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_01.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>6.36168 3.14881 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_s_01'>
+    <static>1</static>
+    <link name='Obstacle_s_01'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_02.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_02.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>2.65793 3.5595 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_s_02'>
+    <static>1</static>
+    <link name='Obstacle_s_02'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_02.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_02.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>5.3088 2.36744 0 0 -0 0</pose>
+  </model>
+  <model name='Obstacle_s_03'>
+    <static>1</static>
+    <link name='Obstacle_s_03'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <enable_wind>0</enable_wind>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_02.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>100</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://terrain/Obstacle_02.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+            </ode>
+            <torsional>
+              <ode/>
+            </torsional>
+          </friction>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0.2</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+08</kp>
+              <kd>10</kd>
+              <max_vel>100</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <pose frame=''>6.20684 5.46957 0 0 -0 0</pose>
+  </model>
+
+  <state world_name='default'>
+    <!-- <sim_time>13 821000000</sim_time>
+    <real_time>70 795422158</real_time>
+    <wall_time>1620460457 3509740</wall_time>
+    <iterations>13821</iterations> -->
+    <model name='Obstacle_01'>
+      <pose frame=''>0.654704 5.65501 0 0 0 -2.58427</pose>
+      <scale>1 1 1</scale>
+      <link name='Obstacle_01'>
+        <pose frame=''>0.654704 5.65501 0 0 0 -2.58427</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
       </link>
-      <pose frame=''>0.319340 1.667119 0 0 -0 -0.542957</pose>
     </model>
     <model name='Obstacle_02'>
-      <static>1</static>
+      <pose frame=''>2.32746 5.76559 0 0 -0 2.66413</pose>
+      <scale>1 1 1</scale>
       <link name='Obstacle_02'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <enable_wind>0</enable_wind>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <inertial>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <laser_retro>0</laser_retro>
-          <max_contacts>100</max_contacts>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-          <surface>
-            <bounce>
-              <restitution_coefficient>0</restitution_coefficient>
-              <threshold>1e+06</threshold>
-            </bounce>
-            <friction>
-              <ode>
-                <mu>0.5</mu>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <collide_without_contact>0</collide_without_contact>
-              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-              <collide_bitmask>1</collide_bitmask>
-              <ode>
-                <soft_cfm>0.2</soft_cfm>
-                <soft_erp>0.2</soft_erp>
-                <kp>1e+08</kp>
-                <kd>10</kd>
-                <max_vel>100</max_vel>
-                <min_depth>0.001</min_depth>
-              </ode>
-            </contact>
-          </surface>
-        </collision>
+        <pose frame=''>2.32746 5.76559 0 0 -0 2.66413</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
       </link>
-      <pose frame=''>-0.551614 6.108483 0 0 -0 -1.206948</pose>
     </model>
     <model name='Obstacle_03'>
-      <static>1</static>
+      <pose frame=''>3.15129 4.59327 0 0 -0 1.65144</pose>
+      <scale>1 1 1</scale>
       <link name='Obstacle_03'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <enable_wind>0</enable_wind>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <inertial>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <laser_retro>0</laser_retro>
-          <max_contacts>100</max_contacts>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-          <surface>
-            <bounce>
-              <restitution_coefficient>0</restitution_coefficient>
-              <threshold>1e+06</threshold>
-            </bounce>
-            <friction>
-              <ode>
-                <mu>0.5</mu>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <collide_without_contact>0</collide_without_contact>
-              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-              <collide_bitmask>1</collide_bitmask>
-              <ode>
-                <soft_cfm>0.2</soft_cfm>
-                <soft_erp>0.2</soft_erp>
-                <kp>1e+08</kp>
-                <kd>10</kd>
-                <max_vel>100</max_vel>
-                <min_depth>0.001</min_depth>
-              </ode>
-            </contact>
-          </surface>
-        </collision>
+        <pose frame=''>3.15129 4.59327 0 0 -0 1.65144</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
       </link>
-      <pose frame=''>3.316734 1.058054 0 0 -0 1.263820</pose>
     </model>
     <model name='Obstacle_04'>
-      <static>1</static>
+      <pose frame=''>4.85128 5.87638 0 0 0 -0.803416</pose>
+      <scale>1 1 1</scale>
       <link name='Obstacle_04'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <enable_wind>0</enable_wind>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <inertial>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <laser_retro>0</laser_retro>
-          <max_contacts>100</max_contacts>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-          <surface>
-            <bounce>
-              <restitution_coefficient>0</restitution_coefficient>
-              <threshold>1e+06</threshold>
-            </bounce>
-            <friction>
-              <ode>
-                <mu>0.5</mu>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <collide_without_contact>0</collide_without_contact>
-              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-              <collide_bitmask>1</collide_bitmask>
-              <ode>
-                <soft_cfm>0.2</soft_cfm>
-                <soft_erp>0.2</soft_erp>
-                <kp>1e+08</kp>
-                <kd>10</kd>
-                <max_vel>100</max_vel>
-                <min_depth>0.001</min_depth>
-              </ode>
-            </contact>
-          </surface>
-        </collision>
+        <pose frame=''>4.85128 5.87638 0 0 0 -0.803416</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
       </link>
-      <pose frame=''>1.267419 3.382685 0 0 -0 2.493626</pose>
     </model>
     <model name='Obstacle_05'>
-      <static>1</static>
+      <pose frame=''>4.42103 5.46136 0 0 -0 2.33583</pose>
+      <scale>1 1 1</scale>
       <link name='Obstacle_05'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <enable_wind>0</enable_wind>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <inertial>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <laser_retro>0</laser_retro>
-          <max_contacts>100</max_contacts>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-          <surface>
-            <bounce>
-              <restitution_coefficient>0</restitution_coefficient>
-              <threshold>1e+06</threshold>
-            </bounce>
-            <friction>
-              <ode>
-                <mu>0.5</mu>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <collide_without_contact>0</collide_without_contact>
-              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-              <collide_bitmask>1</collide_bitmask>
-              <ode>
-                <soft_cfm>0.2</soft_cfm>
-                <soft_erp>0.2</soft_erp>
-                <kp>1e+08</kp>
-                <kd>10</kd>
-                <max_vel>100</max_vel>
-                <min_depth>0.001</min_depth>
-              </ode>
-            </contact>
-          </surface>
-        </collision>
+        <pose frame=''>4.42103 5.46136 0 0 -0 2.33583</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
       </link>
-      <pose frame=''>1.868387 5.434487 0 0 -0 -1.112590</pose>
     </model>
     <model name='Obstacle_06'>
-      <static>1</static>
+      <pose frame=''>4.89622 4.04001 0 0 -0 1.30134</pose>
+      <scale>1 1 1</scale>
       <link name='Obstacle_06'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <enable_wind>0</enable_wind>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <inertial>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <laser_retro>0</laser_retro>
-          <max_contacts>100</max_contacts>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-          <surface>
-            <bounce>
-              <restitution_coefficient>0</restitution_coefficient>
-              <threshold>1e+06</threshold>
-            </bounce>
-            <friction>
-              <ode>
-                <mu>0.5</mu>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <collide_without_contact>0</collide_without_contact>
-              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-              <collide_bitmask>1</collide_bitmask>
-              <ode>
-                <soft_cfm>0.2</soft_cfm>
-                <soft_erp>0.2</soft_erp>
-                <kp>1e+08</kp>
-                <kd>10</kd>
-                <max_vel>100</max_vel>
-                <min_depth>0.001</min_depth>
-              </ode>
-            </contact>
-          </surface>
-        </collision>
+        <pose frame=''>4.89622 4.04001 0 0 -0 1.30134</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
       </link>
-      <pose frame=''>2.385280 2.347130 0 0 0 1.176264</pose>
     </model>
     <model name='Obstacle_07'>
-      <static>1</static>
+      <pose frame=''>0.351044 2.2612 0 0 0 -0.410163</pose>
+      <scale>1 1 1</scale>
       <link name='Obstacle_07'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <enable_wind>0</enable_wind>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <inertial>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <laser_retro>0</laser_retro>
-          <max_contacts>100</max_contacts>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-          <surface>
-            <bounce>
-              <restitution_coefficient>0</restitution_coefficient>
-              <threshold>1e+06</threshold>
-            </bounce>
-            <friction>
-              <ode>
-                <mu>0.5</mu>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <collide_without_contact>0</collide_without_contact>
-              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-              <collide_bitmask>1</collide_bitmask>
-              <ode>
-                <soft_cfm>0.2</soft_cfm>
-                <soft_erp>0.2</soft_erp>
-                <kp>1e+08</kp>
-                <kd>10</kd>
-                <max_vel>100</max_vel>
-                <min_depth>0.001</min_depth>
-              </ode>
-            </contact>
-          </surface>
-        </collision>
+        <pose frame=''>0.351044 2.2612 0 0 0 -0.410163</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
       </link>
-      <pose frame=''>0.467374 4.808480 0 0 -0 -0.734958</pose>
     </model>
     <model name='Obstacle_08'>
-      <static>1</static>
+      <pose frame=''>1.89688 2.37428 0 0 -0 0.349166</pose>
+      <scale>1 1 1</scale>
       <link name='Obstacle_08'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <enable_wind>0</enable_wind>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <inertial>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <laser_retro>0</laser_retro>
-          <max_contacts>100</max_contacts>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-          <surface>
-            <bounce>
-              <restitution_coefficient>0</restitution_coefficient>
-              <threshold>1e+06</threshold>
-            </bounce>
-            <friction>
-              <ode>
-                <mu>0.5</mu>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <collide_without_contact>0</collide_without_contact>
-              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-              <collide_bitmask>1</collide_bitmask>
-              <ode>
-                <soft_cfm>0.2</soft_cfm>
-                <soft_erp>0.2</soft_erp>
-                <kp>1e+08</kp>
-                <kd>10</kd>
-                <max_vel>100</max_vel>
-                <min_depth>0.001</min_depth>
-              </ode>
-            </contact>
-          </surface>
-        </collision>
+        <pose frame=''>1.89688 2.37428 0 0 -0 0.349166</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
       </link>
-      <pose frame=''>1.562470 6.825072 0 0 -0 -0.586626</pose>
     </model>
     <model name='Obstacle_09'>
-      <static>1</static>
+      <pose frame=''>3.74889 4.63837 0 0 0 -1.48838</pose>
+      <scale>1 1 1</scale>
       <link name='Obstacle_09'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <enable_wind>0</enable_wind>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <inertial>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <laser_retro>0</laser_retro>
-          <max_contacts>100</max_contacts>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-          <surface>
-            <bounce>
-              <restitution_coefficient>0</restitution_coefficient>
-              <threshold>1e+06</threshold>
-            </bounce>
-            <friction>
-              <ode>
-                <mu>0.5</mu>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <collide_without_contact>0</collide_without_contact>
-              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-              <collide_bitmask>1</collide_bitmask>
-              <ode>
-                <soft_cfm>0.2</soft_cfm>
-                <soft_erp>0.2</soft_erp>
-                <kp>1e+08</kp>
-                <kd>10</kd>
-                <max_vel>100</max_vel>
-                <min_depth>0.001</min_depth>
-              </ode>
-            </contact>
-          </surface>
-        </collision>
+        <pose frame=''>3.74889 4.63837 0 0 0 -1.48838</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
       </link>
-      <pose frame=''>0.101536 0.156129 0 0 0 0.727388</pose>
     </model>
     <model name='Obstacle_10'>
-      <static>1</static>
+      <pose frame=''>3.51246 2.94848 0 0 -0 1.32415</pose>
+      <scale>1 1 1</scale>
       <link name='Obstacle_10'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <enable_wind>0</enable_wind>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <inertial>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <mass>1</mass>
-          <inertia>
-            <ixx>0.166667</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.166667</iyy>
-            <iyz>0</iyz>
-            <izz>0.166667</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <laser_retro>0</laser_retro>
-          <max_contacts>100</max_contacts>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>/home/liaoren/Desktop/Obstacle_03_ascii_mm.STL</uri>
-            </mesh>
-          </geometry>
-          <surface>
-            <bounce>
-              <restitution_coefficient>0</restitution_coefficient>
-              <threshold>1e+06</threshold>
-            </bounce>
-            <friction>
-              <ode>
-                <mu>0.5</mu>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <contact>
-              <collide_without_contact>0</collide_without_contact>
-              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-              <collide_bitmask>1</collide_bitmask>
-              <ode>
-                <soft_cfm>0.2</soft_cfm>
-                <soft_erp>0.2</soft_erp>
-                <kp>1e+08</kp>
-                <kd>10</kd>
-                <max_vel>100</max_vel>
-                <min_depth>0.001</min_depth>
-              </ode>
-            </contact>
-          </surface>
-        </collision>
+        <pose frame=''>3.51246 2.94848 0 0 -0 1.32415</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
       </link>
-      <pose frame=''>3.046460 4.625160 0 0 0 -2.314393</pose>
     </model>
--->
-
+    <model name='Obstacle_11'>
+      <pose frame=''>4.09609 2.80248 0 0 0 -1.81635</pose>
+      <scale>1 1 1</scale>
+      <link name='Obstacle_11'>
+        <pose frame=''>4.09609 2.80248 0 0 0 -1.81635</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
+      </link>
+    </model>
+    <model name='Obstacle_12'>
+      <pose frame=''>5.47358 3.88213 0 0 0 -1.84034</pose>
+      <scale>1 1 1</scale>
+      <link name='Obstacle_12'>
+        <pose frame=''>5.47358 3.88213 0 0 0 -1.84034</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
+      </link>
+    </model>
+    <model name='Obstacle_s_01'>
+      <pose frame=''>2.38293 3.57767 0 0 -0 1.25932</pose>
+      <scale>1 1 1</scale>
+      <link name='Obstacle_s_01'>
+        <pose frame=''>2.38293 3.57767 0 0 -0 1.25932</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
+      </link>
+    </model>
+    <model name='Obstacle_s_02'>
+      <pose frame=''>5.30405 2.47699 0 0 -0 0.940717</pose>
+      <scale>1 1 1</scale>
+      <link name='Obstacle_s_02'>
+        <pose frame=''>5.30405 2.47699 0 0 -0 0.940717</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
+      </link>
+    </model>
+    <model name='Obstacle_s_03'>
+      <pose frame=''>6.09779 5.21692 0 0 0 -1.23396</pose>
+      <scale>1 1 1</scale>
+      <link name='Obstacle_s_03'>
+        <pose frame=''>6.09779 5.21692 0 0 0 -1.23396</pose>
+        <velocity>0 0 0 0 -0 0</velocity>
+        <acceleration>0 0 0 0 -0 0</acceleration>
+        <wrench>0 0 0 0 -0 0</wrench>
+      </link>
+    </model>
+  </state>
 
   </world>
 </sdf>
